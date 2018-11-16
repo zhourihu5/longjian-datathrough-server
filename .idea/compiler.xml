@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="longjian-datathrough-api" />
+        <module name="longjian-datathrough-app" />
+        <module name="longjian-datathrough-common" />
+        <module name="longjian-datathrough-domain" />
+        <module name="longjian-datathrough-open" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="longjian-datathrough-api" target="1.8" />
+      <module name="longjian-datathrough-app" target="1.8" />
+      <module name="longjian-datathrough-common" target="1.8" />
+      <module name="longjian-datathrough-domain" target="1.8" />
+      <module name="longjian-datathrough-open" target="1.8" />
+      <module name="longjian-datathrough-server" target="1.8" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

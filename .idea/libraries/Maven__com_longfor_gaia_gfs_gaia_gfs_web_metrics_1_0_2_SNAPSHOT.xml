@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.longfor.gaia.gfs:gaia-gfs-web-metrics:1.0.2-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-metrics/1.0.2-SNAPSHOT/gaia-gfs-web-metrics-1.0.2-20180929.065555-1.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-metrics/1.0.2-SNAPSHOT/gaia-gfs-web-metrics-1.0.2-20180929.065555-1-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-metrics/1.0.2-SNAPSHOT/gaia-gfs-web-metrics-1.0.2-20180929.065555-1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

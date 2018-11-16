@@ -54,23 +54,11 @@
 
 
         <!-- 指定数据库表 -->
-        <!--<table schema="" tableName="team" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>
-        <table schema="" tableName="user" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>
-        <table schema="" tableName="role" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>
-        <table schema="" tableName="user_in_team_role" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>
-        <table schema="" tableName="user_in_project_role" enableCountByExample="false" enableUpdateByExample="false"
-               enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>-->
 
-        <table schema="" tableName="team_setting" enableCountByExample="false" enableUpdateByExample="false"
+        <table schema="UserLongjianMurphy" tableName="user_longjian_murphy" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false"></table>
+        <table schema="User" tableName="user" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
     </context>

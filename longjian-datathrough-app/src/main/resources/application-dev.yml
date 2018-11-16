@@ -20,6 +20,11 @@ management:
   security:
     enabled: false
 
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://192.168.36.143:7001/eureka/,http://192.168.36.144:7002/eureka/
+
 # gaia gfs 配置
 
 longfor:

@@ -1,4 +1,4 @@
-package com.longfor.longjian.datathrough.config;
+package com.longfor.longjian.datathrough.app.config;
 
 import com.longfor.gaia.gfs.data.redis.DynamicRedisProvider;
 import com.longfor.gaia.gfs.data.redis.JacksonSerializer;
@@ -10,8 +10,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import javax.annotation.Resource;
 
 /**
- * @author lipeishuai
- * @date 2018-11-11 18:13
+ * Created by Wang on 2018/11/23.
  */
 @Configuration
 public class RedisConfig {
@@ -19,11 +18,13 @@ public class RedisConfig {
     @Resource
     private DynamicRedisProvider dynamicRedisProvider;
 
-    @Bean(name = "demoRedis")
-    public RedisTemplate demoRedis() {
-        StringRedisTemplate template = new StringRedisTemplate(dynamicRedisProvider.loadRedis().get("demoRedis"));
+    @Bean(name = "dataThroughRedis")
+    public RedisTemplate dataThroughRedis() {
+        StringRedisTemplate template = new StringRedisTemplate(dynamicRedisProvider.loadRedis().get("dataThroughRedis"));
         JacksonSerializer.setJacksonSerializer(template);
         return template;
     }
+
+
 
 }

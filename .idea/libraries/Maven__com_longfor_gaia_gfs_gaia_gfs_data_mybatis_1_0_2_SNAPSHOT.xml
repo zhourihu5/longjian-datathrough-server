@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.longfor.gaia.gfs:gaia-gfs-data-mybatis:1.0.2-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11-javadoc.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11-sources.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-data-mybatis/1.0.2-SNAPSHOT/gaia-gfs-data-mybatis-1.0.2-20181115.080606-11-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

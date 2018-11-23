@@ -1,21 +1,54 @@
 package com.longfor.longjian.datathrough.app.appService.murphy;
 
-import com.longfor.longjian.datathrough.app.vo.AccountVo;
-import org.springframework.cloud.netflix.feign.FeignClient;
+import com.longfor.gaia.gfs.web.feign.LFFeignClient;
+import com.longfor.gaia.gfs.web.feign.config.LFFeignConfiguration;
+import com.longfor.longjian.datathrough.app.util.LFResultBean;
+import com.longfor.longjian.datathrough.dto.LoginMurphyOneDto;
+import com.longfor.longjian.datathrough.dto.LoginMurphyThreeDto;
+import com.longfor.longjian.datathrough.dto.LoginMurphyTwoDto;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 /**
  * Created by Wang on 2018/11/16.
  */
-@FeignClient(name="EDS2")
+@LFFeignClient(group = "murphy", value ="login-murphy-one", configuration = LFFeignConfiguration.class)
 public interface MurphyService {
 
     /**
-     * 账户 - 根据账号查询
+     *  登录认证
      * @param
      * @return
      */
-    @PostMapping(path="/eds2/pull/api/account",headers = {"x-authentication-token=eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDM3ODI0NTY4OTEzOTIwIiwic3QiOiIxIiwibG4iOiJsb25namlhbjExMTYiLCJwaSI6IjE2MDAzNzgyNDU2ODkxMzkyMCIsInJuIjoi6b6Z5bu657O757ufIn0.eRexfAemDGFi2_gBLBrq4qHrLHdJWU5F8a9DbWYlrCM"})
-    LFResultBean<AccountVo> getAccount(@RequestBody String beginTime);
+    @PostMapping(value="api/login/baseMurphy",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    LFResultBean  baseMurphy(
+            @RequestHeader("x-authentication-token")String murphtSystemToken,
+            @RequestBody LoginMurphyOneDto loginMurphyOneDto);
+
+
+    /**
+     *  加手机号/邮箱/身份证号码进行登录认证
+     *
+     *  phone、email和credentials_no任意其一，按顺序取一个不为空的字段进行校验，但不可都为空；
+     *
+     * @param
+     * @return
+     */
+    @PostMapping(value="api/login/baseMurphyAdditionalCheck",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    LFResultBean  baseMurphyAdditionalCheck(
+            @RequestHeader("x-authentication-token")String murphtSystemToken,
+            @RequestBody LoginMurphyTwoDto loginMurphyTwoDto);
+
+
+    /**
+     *  选择租户 进行登录
+     * @param
+     * @return
+     */
+    @PostMapping(value="api/login/baseMurphySelectTenant",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    LFResultBean  baseMurphySelectTenant(
+            @RequestHeader("x-authentication-token")String murphtSystemToken,
+            @RequestBody LoginMurphyThreeDto loginMurphyThreeDto);
 }

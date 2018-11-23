@@ -20,33 +20,20 @@ management:
   security:
     enabled: false
 
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://192.168.36.143:7001/eureka/,http://192.168.36.144:7002/eureka/
-
 # gaia gfs 配置
 
 longfor:
   web:
-    swagger:
-      enabled: true
-      description: api docs for longjian datathrough app
-      basePackage: com.longfor
-      contact:
-        name: lipeishuai
-        url: https://www.shanhh.com
-        email: lipeishuai@longfor.com
-    mockserver:
-        enabled: true
-    metrics:
-      jmx:
-        enabled: true # default true
-      prometheus:
-        enabled: true # default false
-      logs:
-        enabled: true # default false
-        reportFrequency: 60 # default 60
+    feign:
+      clients:
+        murphy:
+          login-murphy-one:
+            url: http://192.168.37.71:51004/web/
+        config:
+          login-murphy-one:
+            connectTimeout: 5000 # default 10 * 1000
+            readTimeout: 5000 # default 60 * 1000
+
   data:
     pagehelper:
       helperDialect: mysql
@@ -54,9 +41,9 @@ longfor:
       supportMethodsArguments: true
       params: count=countSql
     mybatis:
-      typeAliasesPackage: com.longfor.longjian.datathrough.dao
+      typeAliasesPackage: com.longfor.longjian.basic.dao
       mapperLocations:
-      - classpath:com/longfor/longjian/datathrough/dao/*.xml
+      - classpath:com/longfor/longjian/basic/dao/*.xml
     mapper:
       notEmpty: true
     #多数据源配置
@@ -87,11 +74,10 @@ longfor:
             remove-abandoned-timeout-millis: 500000
             web-stat-filter-exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*,/download/*,/wj/*,/assets/*'
         custom01:
-          type: com.zaxxer.hikari.HikariDataSource
-          driver-class-name: org.h2.Driver
-          url: jdbc:h2:mem:siberia;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-          username: sa
-          password:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://192.168.36.95:3306/bs_adapter_longhu_sync?useUnicode=true&characterEncoding=UTF8
+          username: zhijian
+          password: JM4tLp9u6pPANLhT
           hikari:
             #控制从池返回的连接的默认自动提交行为。默认值：true
             auto-commit: true
@@ -113,7 +99,7 @@ longfor:
     redis:
       namespace: longjian:datathrough:app
       connection:
-        demoRedis:
+        dataThroughRedis:
           database: 10
           timeout: 2000
           host: 192.168.36.93
@@ -121,3 +107,33 @@ longfor:
           pool:
             minIdle: 50
             maxActive: 50
+
+
+master:
+  msg:
+    mdmSuccess: http://192.168.37.181:50000/RESTAdapter/PO/V1.0/MasterData/PPSReceiveOK
+    mdmError: http://192.168.37.181:50000/RESTAdapter/PO/V1.0/MasterData/PPSErrorLog
+
+murphy:
+  system:
+    tenantTriggerId: 49186334960717832
+    hearder-token-key: x-authentication-token
+    token: eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiIwMDM3ODI0NTY4OTEzOTIwIiwic3QiOiIxIiwibG4iOiJsb25namlhbjExMTYiLCJwaSI6IjE2MDAzNzgyNDU2ODkxMzkyMCIsInJuIjoi6b6Z5bu657O757ufIn0.eRexfAemDGFi2_gBLBrq4qHrLHdJWU5F8a9DbWYlrCM
+  login:
+    interfaceOne: http://192.168.37.71:51004/web/api/login/baseMurphy
+    interfaceTwo: http://192.168.37.71:51004/web/api/login/baseMurphyAdditionalCheck
+    interfaceThree: http://192.168.37.71:51004/web/api/login/baseMurphySelectTenant
+  encrypt:
+    modulus: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCbyPqrjU6XSMm+IPdek0dNt56T4D3nOmD1v3G/1ardRaS1b6hon2ZOicfldM+jANTUHrJ4eEOQ704TGgLqWbEmsVHASnCghHiLuk+UuxEgZNk4i+q9i2x+y8yvxx1qN42ehl4bO3gDla5wOSZF/MZCxK3P1WnwBFjlhwFhyZyi0QIDAQAB
+
+longjian:
+  domain: testlongjianapp.longhu.net
+
+
+
+
+
+
+
+
+

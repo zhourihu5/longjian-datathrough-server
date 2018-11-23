@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.longfor.gaia.gfs:gaia-gfs-web-swagger:1.0.2-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3-javadoc.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3-sources.jar!/" />
+      <root url="jar://E:/maven3.3.9/com/longfor/gaia/gfs/gaia-gfs-web-swagger/1.0.2-SNAPSHOT/gaia-gfs-web-swagger-1.0.2-20181112.074736-3-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

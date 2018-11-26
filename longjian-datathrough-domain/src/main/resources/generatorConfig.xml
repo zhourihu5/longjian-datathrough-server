@@ -68,11 +68,18 @@
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>-->
 
-        <table schema="loginSuccessLog" tableName="login_success_log" enableCountByExample="false" enableUpdateByExample="false"
+        <!--<table schema="MirrorPhaseCOne" tableName="mirror_phase_c_one" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
-        <table schema="loginFailLog" tableName="login_fail_log" enableCountByExample="false" enableUpdateByExample="false"
+        <table schema="MirrorPhaseCTwo" tableName="mirror_phase_c_two" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
+        <table schema="MirrorPhaseCThree" tableName="mirror_phase_c_three" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false"></table>-->
+        <table schema="MirrorPhaseCFour" tableName="mirror_phase_c_four" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false"
+               selectByExampleQueryId="false"></table>
+
     </context>
 </generatorConfiguration>

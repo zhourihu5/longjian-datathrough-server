@@ -113,6 +113,9 @@ master:
   msg:
     mdmSuccess: http://192.168.37.181:50000/RESTAdapter/PO/V1.0/MasterData/PPSReceiveOK
     mdmError: http://192.168.37.181:50000/RESTAdapter/PO/V1.0/MasterData/PPSErrorLog
+  whitelist:
+    enabled: false
+    list: 192.168.32.23
 
 murphy:
   system:
@@ -128,6 +131,8 @@ murphy:
 
 longjian:
   domain: testlongjianapp.longhu.net
+  login:
+    cookie: zjsess #cookie名称
 
 
 

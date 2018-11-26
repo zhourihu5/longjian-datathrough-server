@@ -4,11 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.longjian.datathrough.app.appService.master.MasterService;
-import com.longfor.longjian.datathrough.domain.innerService.AdptProjService;
-import com.longfor.longjian.datathrough.domain.innerService.MirrorPhaseCdcService;
-import com.longfor.longjian.datathrough.domain.innerService.RelLhCompanyToCompanyService;
-import com.longfor.longjian.datathrough.po.AdptProj;
-import com.longfor.longjian.datathrough.po.MirrorPhaseCdc;
+import com.longfor.longjian.datathrough.domain.innerService.*;
+import com.longfor.longjian.datathrough.po.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -16,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import springfox.documentation.spring.web.json.Json;
 
 import javax.annotation.Resource;
 import java.text.DateFormat;
@@ -44,9 +40,23 @@ public class MasterServiceImpl implements MasterService{
     private AdptProjService adptProjService;
 
     @Resource
-    private MirrorPhaseCdcService mirrorPhaseCdcService;
+    private MirrorPhaseCOneService mirrorPhaseCOneService;
+
+    @Resource
+    private MirrorPhaseCTwoService mirrorPhaseCTwoService;
+
+    @Resource
+    private MirrorPhaseCThreeService mirrorPhaseCThreeService;
+
+    @Resource
+    private MirrorPhaseCFourService mirrorPhaseCFourService;
 
 
+    /**
+     * 同步项目
+     * @param systemId
+     * @param data
+     */
     @Override
     public void excuteProject(String systemId, String data) {
         JSONObject json = JSONArray.parseObject(data);
@@ -88,6 +98,11 @@ public class MasterServiceImpl implements MasterService{
 
     }
 
+    /**
+     * 同步分期
+     * @param systemId
+     * @param data
+     */
     @Override
     public void excuteStage(String systemId, String data) {
 
@@ -161,13 +176,9 @@ public class MasterServiceImpl implements MasterService{
                     newAdptProj.setCreateAt(new Date());
                     newAdptProj.setUpdateAt(new Date());
                    int num= adptProjService.createAdptProj(newAdptProj);
-                   if(-1==num) {
-                       result.put("code", "500");
-                       result.put("message", projName + "创建失败");
-                   }else {
-                       result.put("code", "200");
-                       result.put("message", projName + "创建成功");
-                    }
+
+                   insertResultStatus(num,projName,result);
+                   
                 }
         } else if("U".equals(operCode)) { // 更新
 
@@ -206,63 +217,138 @@ public class MasterServiceImpl implements MasterService{
 
 
     /**
-     * 项目分期
+     *按航道 处理分期数据
      * */
-    private JSONObject operStage(JSONObject stageJson) throws ParseException {
+    private JSONObject operStage(JSONObject dujson) throws ParseException {
 
-        String operCode = stageJson.getString("OP_CODE").trim();
-        String buId = stageJson.getString("BU_ID").trim();//航道
-        String stageName=stageJson.getString("PH_NAME");
-        String deFlg=stageJson.getString("DE_FLG");//删除标记
+        String operCode = dujson.getString("OP_CODE").trim();
+        String buId = dujson.getString("BU_ID").trim();//航道
+        String stageName=dujson.getString("PH_NAME");
+        String deFlg=dujson.getString("DE_FLG");//删除标记
         JSONObject result = new JSONObject();
 
-        if("C".equals(operCode)) { // 新增分期
+        if("C".equals(operCode)) { // 新增
 
-            if("C1".equals(buId)){
-              MirrorPhaseCdc oldMirrorPhaseCdc=  mirrorPhaseCdcService.findByBuId(buId);
-              if(oldMirrorPhaseCdc!=null){
+            if("C1".equals(buId)){//如果航道是C1
+              MirrorPhaseCOne oldMirrorPhaseCOne=  mirrorPhaseCOneService.findByBuId(buId);
+              if(oldMirrorPhaseCOne!=null){
                   result.put("code", "400");
-                  result.put("message", oldMirrorPhaseCdc.getPhName() + "已存在");
+                  result.put("message", oldMirrorPhaseCOne.getPhName() + "已存在");
               }else{
-                  int num =saveOrUpdateMirrorPhaseCdc(stageJson,0,0,null);
-                  if(-1==num) {
-                      result.put("code", "500");
-                      result.put("message", stageName + "创建失败");
-                  }else {
-                      result.put("code", "200");
-                      result.put("message", stageName + "创建成功");
-                  }
+                  int num =saveOrUpdateMirrorPhaseCOne(dujson,0,0,null);
+
+                  insertResultStatus(num,stageName,result);
+
               }
+            }else if("C2".equals(buId)){//如果航道是C2
+                MirrorPhaseCTwo oldMirrorPhaseCTwo=  mirrorPhaseCTwoService.findByBuId(buId);
+                if(oldMirrorPhaseCTwo!=null){
+                    result.put("code", "400");
+                    result.put("message", oldMirrorPhaseCTwo.getPhName() + "已存在");
+                }else{
+                    int num =saveOrUpdateMirrorPhaseCTwo(dujson,0,0,null);
+
+                    insertResultStatus(num,stageName,result);
+                }
+            }else if("C3".equals(buId)){//如果航道是C3
+                MirrorPhaseCThree oldMirrorPhaseCThree=  mirrorPhaseCThreeService.findByBuId(buId);
+                if(oldMirrorPhaseCThree!=null){
+                    result.put("code", "400");
+                    result.put("message", oldMirrorPhaseCThree.getPhName() + "已存在");
+                }else{
+                    int num =saveOrUpdateMirrorPhaseCThree(dujson,0,0,null);
+
+                    insertResultStatus(num,stageName,result);
+                }
+            }else if("C4".equals(buId)){//如果航道是C4
+                MirrorPhaseCFour oldMirrorPhaseCFour=  mirrorPhaseCFourService.findByBuId(buId);
+                if(oldMirrorPhaseCFour!=null){
+                    result.put("code", "400");
+                    result.put("message", oldMirrorPhaseCFour.getPrName() + "已存在");
+                }else{
+                    int num =saveOrUpdateMirrorPhaseCFour(dujson,0,0,null);
+
+                    insertResultStatus(num,stageName,result);
+                }
             }
 
         } else if("U".equals(operCode)) { // 更新分期
             if("C1".equals(buId)){
-                MirrorPhaseCdc oldMirrorPhaseCdc=  mirrorPhaseCdcService.findByBuId(buId);
-                int num =saveOrUpdateMirrorPhaseCdc(stageJson,1,oldMirrorPhaseCdc.getId(),null);
-                if(-1==num) {
-                    result.put("code", "500");
-                    result.put("message", stageName + "修改失败");
-                }else {
-                    result.put("code", "200");
-                    result.put("message", stageName + "修改成功");
-                }
 
+                MirrorPhaseCOne oldMirrorPhaseCOne=  mirrorPhaseCOneService.findByBuId(buId);
+
+                int num =saveOrUpdateMirrorPhaseCOne(dujson,1,oldMirrorPhaseCOne.getId(),null);
+
+                updateResultStatus(num,stageName,result);
+
+            }if("C2".equals(buId)){
+
+                MirrorPhaseCTwo oldMirrorPhaseCTwo=  mirrorPhaseCTwoService.findByBuId(buId);
+
+                int num =saveOrUpdateMirrorPhaseCTwo(dujson,1,oldMirrorPhaseCTwo.getId(),null);
+
+                updateResultStatus(num,stageName,result);
+
+            }if("C3".equals(buId)){
+
+                MirrorPhaseCThree oldMirrorPhaseCThree=  mirrorPhaseCThreeService.findByBuId(buId);
+
+                int num =saveOrUpdateMirrorPhaseCThree(dujson,1,oldMirrorPhaseCThree.getId(),null);
+
+                updateResultStatus(num,stageName,result);
+
+            }if("C1".equals(buId)){
+
+                MirrorPhaseCFour oldMirrorPhaseCFour=  mirrorPhaseCFourService.findByBuId(buId);
+
+                int num =saveOrUpdateMirrorPhaseCFour(dujson,1,oldMirrorPhaseCFour.getId(),null);
+
+                updateResultStatus(num,stageName,result);
             }
+
         } else if("D".equals(operCode)) {
-            MirrorPhaseCdc oldMirrorPhaseCdc=  mirrorPhaseCdcService.findByBuId(buId);
 
-            oldMirrorPhaseCdc.setDeFlg(deFlg);
+            if("C1".equals(buId)) {
 
-            int num =saveOrUpdateMirrorPhaseCdc(stageJson,2,oldMirrorPhaseCdc.getId(),deFlg);
-            if(-1==num) {
-                result.put("code", "500");
-                result.put("message", stageName + "删除失败");
-            }else {
-                result.put("code", "200");
-                result.put("message", stageName + "删除成功");
+                MirrorPhaseCOne oldMirrorPhaseCOne = mirrorPhaseCOneService.findByBuId(buId);
+
+                oldMirrorPhaseCOne.setDeFlg(deFlg);
+
+                int num = saveOrUpdateMirrorPhaseCOne(dujson, 2, oldMirrorPhaseCOne.getId(), deFlg);
+
+                deleteResultStatus(num,stageName,result);
+
+            }else if("C2".equals(buId)) {
+
+                MirrorPhaseCTwo oldMirrorPhaseCTwo = mirrorPhaseCTwoService.findByBuId(buId);
+
+                oldMirrorPhaseCTwo.setDeFlg(deFlg);
+
+                int num = saveOrUpdateMirrorPhaseCTwo(dujson, 2, oldMirrorPhaseCTwo.getId(), deFlg);
+
+                deleteResultStatus(num,stageName,result);
+            }else if("C3".equals(buId)) {
+
+                MirrorPhaseCThree oldMirrorPhaseCThree = mirrorPhaseCThreeService.findByBuId(buId);
+
+                oldMirrorPhaseCThree.setDeFlg(deFlg);
+
+                int num = saveOrUpdateMirrorPhaseCThree(dujson, 2, oldMirrorPhaseCThree.getId(), deFlg);
+
+                deleteResultStatus(num,stageName,result);
+
+            }else if("C4".equals(buId)) {
+
+                MirrorPhaseCFour oldMirrorPhaseCFour = mirrorPhaseCFourService.findByBuId(buId);
+
+                oldMirrorPhaseCFour.setDeFlg(deFlg);
+
+                int num = saveOrUpdateMirrorPhaseCFour(dujson, 2, oldMirrorPhaseCFour.getId(), deFlg);
+
+                deleteResultStatus(num,stageName,result);
             }
         }
-        JSONArray groups = stageJson.getJSONArray("GroupArray");//组团
+        JSONArray groups = dujson.getJSONArray("GroupArray");//组团
 
         // 处理分期下组团
         if(groups != null ) {
@@ -287,74 +373,256 @@ public class MasterServiceImpl implements MasterService{
 
     /**
      * 新增C1 分期数据
-     * @param stageJson
+     * @param dujson
      * @return
      * @throws ParseException
      */
-    private int saveOrUpdateMirrorPhaseCdc(JSONObject stageJson,int type,int id,String deFlg) throws ParseException {
+    private int saveOrUpdateMirrorPhaseCOne(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
 
         DateFormat dateFormatter = DateFormat.getDateTimeInstance();
 
-        MirrorPhaseCdc mirrorPhaseCdc=new MirrorPhaseCdc();
-        mirrorPhaseCdc.setPhId(stageJson.getString("PH_ID"));
-        mirrorPhaseCdc.setSapVer(stageJson.getString("SAP_VER"));
-        mirrorPhaseCdc.setVerNam(stageJson.getString("VER_NAM"));
-        mirrorPhaseCdc.setHisCode(stageJson.getString("HIS_CODE"));
-        mirrorPhaseCdc.setHisIcard(stageJson.getString("HIS_ICARD"));
-        mirrorPhaseCdc.setHisGuid(stageJson.getString("HIS_GUID"));
-        mirrorPhaseCdc.setHisFlg(stageJson.getString("HIS_FLG"));
-        mirrorPhaseCdc.setPhName(stageJson.getString("PH_NAME"));
-        mirrorPhaseCdc.setApStatus(stageJson.getString("AP_STATUS"));
-        mirrorPhaseCdc.setDeFlg(stageJson.getString("DE_FLG"));
-        mirrorPhaseCdc.setPhCname(stageJson.getString("PH_CNAME"));
-        mirrorPhaseCdc.setPrCompan(stageJson.getString("PR_COMPAN"));
-        mirrorPhaseCdc.setPrType(stageJson.getString("PR_TYPE"));
-        mirrorPhaseCdc.setBuId(stageJson.getString("BU_ID"));
-        mirrorPhaseCdc.setCaTyp(stageJson.getString("CA_TYP"));
-        mirrorPhaseCdc.setCaTypX(stageJson.getString("CA_TYP_X"));
-        mirrorPhaseCdc.setCaTypT(stageJson.getString("CA_TYP_T"));
-        mirrorPhaseCdc.setPrBugets(stageJson.getString("PR_BUGETS"));
-        mirrorPhaseCdc.setPhPrdlev(stageJson.getString("PH_PRDLEV"));
-        mirrorPhaseCdc.setPhDevlev(stageJson.getString("PH_DEVLEV"));
-        mirrorPhaseCdc.setCrDate(dateFormatter.parse(stageJson.getString("CR_DATE")));
-        mirrorPhaseCdc.setChDate(dateFormatter.parse(stageJson.getString("CH_DATE")));
-        mirrorPhaseCdc.setPrId(stageJson.getString("PR_ID"));
-        mirrorPhaseCdc.setPhOtypD(stageJson.getString("PH_OTYP_D"));
-        mirrorPhaseCdc.setPhOtypO(stageJson.getString("PH_OTYP_O"));
-        mirrorPhaseCdc.setPhEqRD(stageJson.getString("PH_EQ_R_D"));
-        mirrorPhaseCdc.setPhEqRX(stageJson.getString("PH_EQ_R_X"));
-        mirrorPhaseCdc.setPhEqRT(stageJson.getString("PH_EQ_R_T"));
-        mirrorPhaseCdc.setPhEqRO(stageJson.getString("PH_EQ_R_O"));
-        mirrorPhaseCdc.setPhEqOX(stageJson.getString("PH_EQ_O_X"));
-        mirrorPhaseCdc.setPhEqOT(stageJson.getString("PH_EQ_O_T"));
-        mirrorPhaseCdc.setPhPrdlin(stageJson.getString("PH_PRDLIN"));
-        mirrorPhaseCdc.setPhInterv(stageJson.getString("PH_INTERV"));
-        mirrorPhaseCdc.setPhBustyp(stageJson.getString("PH_BUSTYP"));
-        mirrorPhaseCdc.setPhAsstyp(stageJson.getString("PH_ASSTYP"));
-        mirrorPhaseCdc.setPrGettyp(stageJson.getString("PR_GETTYP"));
-        mirrorPhaseCdc.setPhMaTyp(stageJson.getString("PH_MA_TYP"));
-        mirrorPhaseCdc.setBugetFlg(stageJson.getString("BUGET_FLG"));
-        mirrorPhaseCdc.setPhPrgets(stageJson.getString("PH_PRGETS"));
-        mirrorPhaseCdc.setPhGrelev(stageJson.getString("PH_GRELEV"));
-        mirrorPhaseCdc.setPhOpenD(dateFormatter.parse(stageJson.getString("PH_OPEN_D")));
-        mirrorPhaseCdc.setPhLandcl(stageJson.getString("PH_LANDCL"));
-        mirrorPhaseCdc.setTaxTyp(stageJson.getString("TAX_TYP"));
-        mirrorPhaseCdc.setPhMeFlg(stageJson.getString("PH_ME_FLG"));
-        mirrorPhaseCdc.setPhMcFlg(stageJson.getString("PH_MC_FLG"));
-        mirrorPhaseCdc.setPhToFlg(stageJson.getString("PH_TO_FLG"));
-        mirrorPhaseCdc.setPhMaFlg(stageJson.getString("PH_MA_FLG"));
-        mirrorPhaseCdc.setPhDevsta(stageJson.getString("PH_DEVSTA"));
+        MirrorPhaseCOne mirrorPhaseCdc=new MirrorPhaseCOne();
+        mirrorPhaseCdc.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseCdc.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseCdc.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseCdc.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseCdc.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseCdc.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseCdc.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseCdc.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCdc.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseCdc.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseCdc.setPhCname(dujson.getString("PH_CNAME"));
+        mirrorPhaseCdc.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseCdc.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseCdc.setPhPrdlev(dujson.getString("PH_PRDLEV"));
+        mirrorPhaseCdc.setPhDevlev(dujson.getString("PH_DEVLEV"));
+        mirrorPhaseCdc.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
+        mirrorPhaseCdc.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCdc.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCdc.setPhOptyp(dujson.getString("PH_OPTYP"));
+        mirrorPhaseCdc.setPhEquiR(dujson.getString("PH_EQUI_R"));
+        mirrorPhaseCdc.setPhEquiX(dujson.getString("PH_EQUI_X"));
+        mirrorPhaseCdc.setPhEquiT(dujson.getString("PH_EQUI_T"));
+        mirrorPhaseCdc.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseCdc.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseCdc.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseCdc.setPrBugets(dujson.getString("PR_BUGETS"));
+        mirrorPhaseCdc.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseCdc.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseCdc.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseCdc.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseCdc.setPhDelive(dateFormatter.parse(dujson.getString("PH_DELIVE")));
+        mirrorPhaseCdc.setPhLandcl(dujson.getString("PH_LANDCL"));
+
+        mirrorPhaseCdc.setArchSet(dujson.getString("ARCH_SET"));
+        mirrorPhaseCdc.setHardcSet(dujson.getString("HARDC_SET"));
+        mirrorPhaseCdc.setLandsSet(dujson.getString("LANDS_SET"));
+        mirrorPhaseCdc.setTaxTyp(dujson.getString("TAX_TYP"));
         int num;
         if(0==type){//新增
-            num= mirrorPhaseCdcService.insert(mirrorPhaseCdc);
+            num= mirrorPhaseCOneService.insert(mirrorPhaseCdc);
         }else if(1==type) {//修改
             mirrorPhaseCdc.setId(id);
-            num=mirrorPhaseCdcService.update(mirrorPhaseCdc);
+            num= mirrorPhaseCOneService.update(mirrorPhaseCdc);
         }else{//删除
             mirrorPhaseCdc.setDeFlg(deFlg);
-            num=mirrorPhaseCdcService.update(mirrorPhaseCdc);
+            num= mirrorPhaseCOneService.update(mirrorPhaseCdc);
         }
         return  num;
+    }
+
+    /**
+     * 新增C2 分期数据
+     * @param dujson
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseCTwo(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+
+        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
+
+        MirrorPhaseCTwo mirrorPhaseCTwo=new MirrorPhaseCTwo();
+        mirrorPhaseCTwo.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseCTwo.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseCTwo.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseCTwo.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseCTwo.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseCTwo.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseCTwo.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseCTwo.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCTwo.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseCTwo.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseCTwo.setPhCname(dujson.getString("PH_CNAME"));
+        mirrorPhaseCTwo.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseCTwo.setPrType(dujson.getString("PR_TYPE"));
+        mirrorPhaseCTwo.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseCTwo.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseCTwo.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseCTwo.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseCTwo.setPrBugets(dujson.getString("PR_BUGETS"));
+        mirrorPhaseCTwo.setPhPrdlev(dujson.getString("PH_PRDLEV"));
+        mirrorPhaseCTwo.setPhDevlev(dujson.getString("PH_DEVLEV"));
+        mirrorPhaseCTwo.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
+        mirrorPhaseCTwo.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCTwo.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCTwo.setPhOtypD(dujson.getString("PH_OTYP_D"));
+        mirrorPhaseCTwo.setPhOtypO(dujson.getString("PH_OTYP_O"));
+        mirrorPhaseCTwo.setPhEqRD(dujson.getString("PH_EQ_R_D"));
+        mirrorPhaseCTwo.setPhEqRX(dujson.getString("PH_EQ_R_X"));
+        mirrorPhaseCTwo.setPhEqRT(dujson.getString("PH_EQ_R_T"));
+        mirrorPhaseCTwo.setPhEqRO(dujson.getString("PH_EQ_R_O"));
+        mirrorPhaseCTwo.setPhEqOX(dujson.getString("PH_EQ_O_X"));
+        mirrorPhaseCTwo.setPhEqOT(dujson.getString("PH_EQ_O_T"));
+        mirrorPhaseCTwo.setPhPrdlin(dujson.getString("PH_PRDLIN"));
+        mirrorPhaseCTwo.setPhInterv(dujson.getString("PH_INTERV"));
+        mirrorPhaseCTwo.setPhBustyp(dujson.getString("PH_BUSTYP"));
+        mirrorPhaseCTwo.setPhAsstyp(dujson.getString("PH_ASSTYP"));
+        mirrorPhaseCTwo.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseCTwo.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseCTwo.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseCTwo.setPhOpenD(dateFormatter.parse(dujson.getString("PH_OPEN_D")));
+        mirrorPhaseCTwo.setPhLandcl(dujson.getString("PH_LANDCL"));
+        mirrorPhaseCTwo.setTaxTyp(dujson.getString("TAX_TYP"));
+        mirrorPhaseCTwo.setPhMeFlg(dujson.getString("PH_ME_FLG"));
+        mirrorPhaseCTwo.setPhMcFlg(dujson.getString("PH_MC_FLG"));
+        mirrorPhaseCTwo.setPhToFlg(dujson.getString("PH_TO_FLG"));
+        mirrorPhaseCTwo.setPhMaFlg(dujson.getString("PH_MA_FLG"));
+
+        mirrorPhaseCTwo.setPhDevsta(dujson.getString("PH_DEVSTA"));
+
+
+        int num;
+        if(0==type){//新增
+            num= mirrorPhaseCTwoService.insert(mirrorPhaseCTwo);
+        }else if(1==type) {//修改
+            mirrorPhaseCTwo.setId(id);
+            num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
+        }else{//删除
+            mirrorPhaseCTwo.setDeFlg(deFlg);
+            num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
+        }
+        return  num;
+    }
+
+    /**
+     * 新增C3 分期数据
+     * @param dujson
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseCThree(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+
+        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
+
+        MirrorPhaseCThree mirrorPhaseCThree=new MirrorPhaseCThree();
+        mirrorPhaseCThree.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseCThree.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseCThree.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseCThree.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseCThree.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseCThree.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseCThree.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseCThree.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCThree.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseCThree.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseCThree.setPrType(dujson.getString("PR_TYPE"));
+        mirrorPhaseCThree.setPrCompan(dujson.getString("PR_COMPAN"));
+
+        mirrorPhaseCThree.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseCThree.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
+        mirrorPhaseCThree.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCThree.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCThree.setPhOptyp(dujson.getString("PH_OPTYP"));
+
+        mirrorPhaseCThree.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseCThree.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseCThree.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseCThree.setPhOtypD(dujson.getString("PH_OTYP_D"));
+        mirrorPhaseCThree.setPhOtypO(dujson.getString("PH_OTYP_O"));
+        mirrorPhaseCThree.setPhEqRD(dujson.getString("PH_EQ_R_D"));
+        mirrorPhaseCThree.setPhEqRX(dujson.getString("PH_EQ_R_X"));
+        mirrorPhaseCThree.setPhEqRT(dujson.getString("PH_EQ_R_T"));
+        mirrorPhaseCThree.setPhEqRO(dujson.getString("PH_EQ_R_O"));
+        mirrorPhaseCThree.setPhEqOX(dujson.getString("PH_EQ_O_X"));
+        mirrorPhaseCThree.setPhEqOT(dujson.getString("PH_EQ_O_T"));
+        mirrorPhaseCThree.setPhPrdlin(dujson.getString("PH_PRDLIN"));
+        mirrorPhaseCThree.setPhLandcl(dujson.getString("PH_LANDCL"));
+        mirrorPhaseCThree.setTaxTyp(dujson.getString("TAX_TYP"));
+        mirrorPhaseCThree.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseCThree.setPhAsstyp(dujson.getString("PH_ASSTYP"));
+        mirrorPhaseCThree.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseCThree.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseCThree.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseCThree.setPhOpenD(dateFormatter.parse(dujson.getString("PH_OPEN_D")));
+        mirrorPhaseCThree.setPrBugets(dujson.getString("PR_BUGETS"));
+
+        mirrorPhaseCThree.setPhRnlev(dujson.getString("PH_RNLEV"));
+        mirrorPhaseCThree.setPhFlplan(dujson.getString("PH_FLPLAN"));
+
+        mirrorPhaseCThree.setPhLeaper(Integer.parseInt(dujson.getString("PH_LEAPER")));
+        mirrorPhaseCThree.setPhRenSd(dateFormatter.parse(dujson.getString("PH_REN_SD")));
+        mirrorPhaseCThree.setPhRenEd(dateFormatter.parse(dujson.getString("PH_REN_ED")));
+        mirrorPhaseCThree.setPhShpadr(dujson.getString("PH_SHPADR"));
+        mirrorPhaseCThree.setPhOpname(dujson.getString("PH_OPNAME"));
+        mirrorPhaseCThree.setPhOpid(dujson.getString("PH_OPID"));
+        mirrorPhaseCThree.setConstype(dujson.getString("CONSTYPE"));
+        mirrorPhaseCThree.setPhShFlg(dujson.getString("PH_SH_FLG"));
+
+        int num;
+        if(0==type){//新增
+            num= mirrorPhaseCThreeService.insert(mirrorPhaseCThree);
+        }else if(1==type) {//修改
+            mirrorPhaseCThree.setId(id);
+            num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
+        }else{//删除
+            mirrorPhaseCThree.setDeFlg(deFlg);
+            num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
+        }
+        return  num;
+    }
+
+
+    /**
+     * 新增C4 数据
+     * @param dujson
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseCFour(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+
+        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
+
+        MirrorPhaseCFour mirrorPhaseCFour = new MirrorPhaseCFour();
+        mirrorPhaseCFour.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCFour.setSapver(dujson.getString("SAP_VER"));
+        mirrorPhaseCFour.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseCFour.setPrCom(dujson.getString("PR_COM"));
+        mirrorPhaseCFour.setPrName(dujson.getString("PR_NAME"));
+        mirrorPhaseCFour.setOldprId(dujson.getString("OLDPR_ID"));
+        mirrorPhaseCFour.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseCFour.setPrAddr(dujson.getString("PR_ADDR"));
+        mirrorPhaseCFour.setPrDistr(dujson.getString("PR_DISTR"));
+        mirrorPhaseCFour.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
+        mirrorPhaseCFour.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCFour.setTakeDate(dujson.getString("TAKE_DATE"));
+        mirrorPhaseCFour.setPrType(dujson.getString("PR_TYPE"));
+        mirrorPhaseCFour.setServlev(dujson.getString("SERVLEV"));
+        mirrorPhaseCFour.setTakeType(dujson.getString("TAKE_TYPE"));
+        mirrorPhaseCFour.setDeFlg(dujson.getString("DE_FLG"));
+
+        int num;
+        if(0==type){//新增
+            num= mirrorPhaseCFourService.insert(mirrorPhaseCFour);
+        }else if(1==type) {//修改
+            mirrorPhaseCFour.setId(id);
+            num= mirrorPhaseCFourService.update(mirrorPhaseCFour);
+        }else{//删除
+            mirrorPhaseCFour.setDeFlg(deFlg);
+            num= mirrorPhaseCFourService.update(mirrorPhaseCFour);
+        }
+        return  num;
+
     }
 
 
@@ -384,4 +652,57 @@ public class MasterServiceImpl implements MasterService{
         }
 
     }
+
+    /**
+     * 新增分期 返回成功或者失败
+     * @param num
+     * @param stageName
+     * @return
+     */
+    private JSONObject insertResultStatus( int num,String stageName ,JSONObject result){
+        if(-1==num) {
+            result.put("code", "500");
+            result.put("message", stageName + "创建失败");
+        }else {
+            result.put("code", "200");
+            result.put("message", stageName + "创建成功");
+        }
+        return result;
+    }
+
+    /**
+     * 修改航道 分期 返回成功或者失败
+     * @param num
+     * @param stageName
+     * @return
+     */
+    private JSONObject updateResultStatus( int num,String stageName ,JSONObject result){
+        if(-1==num) {
+            result.put("code", "500");
+            result.put("message", stageName + "修改失败");
+        }else {
+            result.put("code", "200");
+            result.put("message", stageName + "修改成功");
+        }
+        return result;
+    }
+
+    /**
+     * 删除航道 分期 返回成功或者失败
+     * @param num
+     * @param stageName
+     * @return
+     */
+    private JSONObject deleteResultStatus( int num,String stageName ,JSONObject result) {
+        if (-1 == num) {
+            result.put("code", "500");
+            result.put("message", stageName + "删除失败");
+        } else {
+            result.put("code", "200");
+            result.put("message", stageName + "删除成功");
+        }
+        return result;
+    }
+
+
 }

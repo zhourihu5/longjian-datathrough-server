@@ -58,11 +58,13 @@ public class LoginServiceImpl implements LoginService {
     @Value("${murphy.system.tenantTriggerId}")
     private String tenantTriggerId;
 
-    /**
-     * 域名
-     */
+    //域名
     @Value("${longjian.domain}")
     private String daoMain;
+
+    //cookie名称
+    @Value("${longjian.login.cookie}")
+    private String cookie;
 
     @Resource
     private UserService userService;

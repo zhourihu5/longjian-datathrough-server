@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @RestController
 @Slf4j
-@RequestMapping("longjian/v1/")
+@RequestMapping("uc/")
 public class LoginController {
 
     @Resource
@@ -33,7 +33,7 @@ public class LoginController {
      * @param response
      * @return
      */
-    @PostMapping(value = "pc/baseMurphy", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "user/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LjBaseResponse baseMurphy(@RequestParam(value = "user_name") String username,
                                      @RequestParam(value = "password") String password,
                                      @RequestParam(value = "remember_me") int rememberMe,
@@ -108,7 +108,7 @@ public class LoginController {
      * @param response
      * @return
      */
-    @PostMapping(value = "app/baseMurphy", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "app/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public LjBaseResponse appBaseMurphy(
             @RequestParam(value = "username") String username,
             @RequestParam(value = "password") String password,

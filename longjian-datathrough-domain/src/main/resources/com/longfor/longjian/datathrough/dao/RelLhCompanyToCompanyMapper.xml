@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.RelLhCompanyToCompanyMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.RelLhCompanyToCompany" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="auto_id" property="autoId" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="company_id" property="companyId" jdbcType="INTEGER" />
+    <result column="lh_gscode" property="lhGscode" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="delete_at" property="deleteAt" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    auto_id, group_id, company_id, lh_gscode, create_at, delete_at
+  </sql>
+
+
+  <select id="getComapnyMapData" resultType="map">
+
+    select lh_gscode as gscode,company_id as companyId FROM rel_lh_company_to_company
+
+  </select>
+
+</mapper>

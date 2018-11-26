@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.MirrorPhaseGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.MirrorPhaseGroup" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+    <result column="gr_id" property="grId" jdbcType="VARCHAR" />
+    <result column="his_id" property="hisId" jdbcType="VARCHAR" />
+    <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
+    <result column="gr_name" property="grName" jdbcType="VARCHAR" />
+    <result column="gr_cname" property="grCname" jdbcType="VARCHAR" />
+    <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, ph_id, gr_id, his_id, his_flg, gr_name, gr_cname, de_flg
+  </sql>
+</mapper>

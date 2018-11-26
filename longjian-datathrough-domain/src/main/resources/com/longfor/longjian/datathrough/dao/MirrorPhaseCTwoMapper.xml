@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.MirrorPhaseCTwoMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.MirrorPhaseCTwo" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+    <result column="sap_ver" property="sapVer" jdbcType="VARCHAR" />
+    <result column="ver_nam" property="verNam" jdbcType="VARCHAR" />
+    <result column="his_code" property="hisCode" jdbcType="VARCHAR" />
+    <result column="his_icard" property="hisIcard" jdbcType="VARCHAR" />
+    <result column="his_guid" property="hisGuid" jdbcType="VARCHAR" />
+    <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
+    <result column="ph_name" property="phName" jdbcType="VARCHAR" />
+    <result column="ap_status" property="apStatus" jdbcType="VARCHAR" />
+    <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
+    <result column="ph_cname" property="phCname" jdbcType="VARCHAR" />
+    <result column="pr_compan" property="prCompan" jdbcType="VARCHAR" />
+    <result column="pr_type" property="prType" jdbcType="VARCHAR" />
+    <result column="bu_id" property="buId" jdbcType="VARCHAR" />
+    <result column="ca_typ" property="caTyp" jdbcType="VARCHAR" />
+    <result column="ca_typ_x" property="caTypX" jdbcType="VARCHAR" />
+    <result column="ca_typ_t" property="caTypT" jdbcType="VARCHAR" />
+    <result column="pr_bugets" property="prBugets" jdbcType="VARCHAR" />
+    <result column="ph_prdlev" property="phPrdlev" jdbcType="VARCHAR" />
+    <result column="ph_devlev" property="phDevlev" jdbcType="VARCHAR" />
+    <result column="cr_date" property="crDate" jdbcType="TIMESTAMP" />
+    <result column="ch_date" property="chDate" jdbcType="TIMESTAMP" />
+    <result column="pr_id" property="prId" jdbcType="VARCHAR" />
+    <result column="ph_otyp_d" property="phOtypD" jdbcType="VARCHAR" />
+    <result column="ph_otyp_o" property="phOtypO" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_d" property="phEqRD" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_x" property="phEqRX" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_t" property="phEqRT" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_o" property="phEqRO" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_x" property="phEqOX" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_t" property="phEqOT" jdbcType="VARCHAR" />
+    <result column="ph_prdlin" property="phPrdlin" jdbcType="VARCHAR" />
+    <result column="ph_interv" property="phInterv" jdbcType="VARCHAR" />
+    <result column="ph_bustyp" property="phBustyp" jdbcType="VARCHAR" />
+    <result column="ph_asstyp" property="phAsstyp" jdbcType="VARCHAR" />
+    <result column="pr_gettyp" property="prGettyp" jdbcType="VARCHAR" />
+    <result column="ph_ma_typ" property="phMaTyp" jdbcType="VARCHAR" />
+    <result column="buget_flg" property="bugetFlg" jdbcType="VARCHAR" />
+    <result column="ph_prgets" property="phPrgets" jdbcType="VARCHAR" />
+    <result column="ph_grelev" property="phGrelev" jdbcType="VARCHAR" />
+    <result column="ph_open_d" property="phOpenD" jdbcType="TIMESTAMP" />
+    <result column="ph_landcl" property="phLandcl" jdbcType="VARCHAR" />
+    <result column="tax_typ" property="taxTyp" jdbcType="VARCHAR" />
+    <result column="ph_me_flg" property="phMeFlg" jdbcType="VARCHAR" />
+    <result column="ph_mc_flg" property="phMcFlg" jdbcType="VARCHAR" />
+    <result column="ph_to_flg" property="phToFlg" jdbcType="VARCHAR" />
+    <result column="ph_ma_flg" property="phMaFlg" jdbcType="VARCHAR" />
+    <result column="ph_devsta" property="phDevsta" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name, ap_status, 
+    de_flg, ph_cname, pr_compan, pr_type, bu_id, ca_typ, ca_typ_x, ca_typ_t, pr_bugets, 
+    ph_prdlev, ph_devlev, cr_date, ch_date, pr_id, ph_otyp_d, ph_otyp_o, ph_eq_r_d, ph_eq_r_x, 
+    ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, ph_eq_o_t, ph_prdlin, ph_interv, ph_bustyp, ph_asstyp, 
+    pr_gettyp, ph_ma_typ, buget_flg, ph_prgets, ph_grelev, ph_open_d, ph_landcl, tax_typ, 
+    ph_me_flg, ph_mc_flg, ph_to_flg, ph_ma_flg, ph_devsta
+  </sql>
+</mapper>

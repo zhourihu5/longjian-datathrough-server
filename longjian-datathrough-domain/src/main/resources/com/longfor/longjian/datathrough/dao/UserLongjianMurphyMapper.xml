@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.UserLongjianMurphyMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.UserLongjianMurphy" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="longjian_user_id" property="longjianUserId" jdbcType="INTEGER" />
+    <result column="murphy_login_name" property="murphyLoginName" jdbcType="VARCHAR" />
+    <result column="tenant_id" property="tenantId" jdbcType="BIGINT" />
+    <result column="last_synchronize_time" property="lastSynchronizeTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, longjian_user_id, murphy_login_name, tenant_id, last_synchronize_time
+  </sql>
+
+  <select id="getLastSynchronizeTime">
+      select max(create_at) from user_longjian_murphy
+  </select>
+</mapper>

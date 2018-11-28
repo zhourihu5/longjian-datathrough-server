@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.AdptGroupMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.AdptGroup" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="auto_id" property="autoId" jdbcType="INTEGER" />
+    <result column="gr_id" property="grId" jdbcType="VARCHAR" />
+    <result column="his_id" property="hisId" jdbcType="VARCHAR" />
+    <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
+    <result column="gr_name" property="grName" jdbcType="VARCHAR" />
+    <result column="gr_cname" property="grCname" jdbcType="VARCHAR" />
+    <result column="de_flg" property="deFlg" jdbcType="CHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
+    <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    auto_id, gr_id, his_id, his_flg, gr_name, gr_cname, de_flg, create_at, update_at,ph_id
+  </sql>
+</mapper>

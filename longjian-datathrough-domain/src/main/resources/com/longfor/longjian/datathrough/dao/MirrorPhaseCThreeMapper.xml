@@ -14,6 +14,7 @@
     <result column="his_guid" property="hisGuid" jdbcType="VARCHAR" />
     <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
     <result column="ph_name" property="phName" jdbcType="VARCHAR" />
+    <result column="tree_phm" property="treePhm" jdbcType="VARCHAR" />
     <result column="ap_status" property="apStatus" jdbcType="VARCHAR" />
     <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
     <result column="pr_type" property="prType" jdbcType="VARCHAR" />
@@ -22,6 +23,7 @@
     <result column="cr_date" property="crDate" jdbcType="TIMESTAMP" />
     <result column="ch_date" property="chDate" jdbcType="TIMESTAMP" />
     <result column="pr_id" property="prId" jdbcType="VARCHAR" />
+    <result column="his_pr_id" property="hisPrId" jdbcType="VARCHAR" />
     <result column="ph_optyp" property="phOptyp" jdbcType="VARCHAR" />
     <result column="ca_typ" property="caTyp" jdbcType="VARCHAR" />
     <result column="ca_typ_x" property="caTypX" jdbcType="VARCHAR" />
@@ -60,8 +62,8 @@
       WARNING - @mbg.generated
     -->
     id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name, ap_status, 
-    de_flg, pr_type, pr_compan, bu_id, cr_date, ch_date, pr_id, ph_optyp, ca_typ, ca_typ_x, 
-    ca_typ_t, ph_otyp_d, ph_otyp_o, ph_eq_r_d, ph_eq_r_x, ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, 
+    de_flg, pr_type, pr_compan, bu_id, cr_date, ch_date, pr_id, ph_optyp, ca_typ, ca_typ_x, tree_phm,
+    ca_typ_t, ph_otyp_d, ph_otyp_o, ph_eq_r_d, ph_eq_r_x, ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, his_pr_id,
     ph_eq_o_t, ph_prdlin, ph_landcl, tax_typ, buget_flg, ph_asstyp, pr_gettyp, ph_ma_typ, 
     ph_prgets, ph_open_d, pr_bugets, ph_rnlev, ph_flplan, ph_leaper, ph_ren_sd, ph_ren_ed, 
     ph_shpadr, ph_opname, ph_opid, constype, ph_sh_flg

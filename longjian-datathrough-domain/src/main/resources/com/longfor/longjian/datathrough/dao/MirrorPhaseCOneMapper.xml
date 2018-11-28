@@ -17,6 +17,7 @@
     <result column="ap_status" property="apStatus" jdbcType="VARCHAR" />
     <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
     <result column="ph_cname" property="phCname" jdbcType="VARCHAR" />
+    <result column="tree_phm" property="treePhm" jdbcType="VARCHAR" />
     <result column="pr_compan" property="prCompan" jdbcType="VARCHAR" />
     <result column="bu_id" property="buId" jdbcType="VARCHAR" />
     <result column="ph_prdlev" property="phPrdlev" jdbcType="VARCHAR" />
@@ -24,6 +25,7 @@
     <result column="cr_date" property="crDate" jdbcType="TIMESTAMP" />
     <result column="ch_date" property="chDate" jdbcType="TIMESTAMP" />
     <result column="pr_id" property="prId" jdbcType="VARCHAR" />
+    <result column="his_pr_id" property="hisPrId" jdbcType="VARCHAR" />
     <result column="ph_optyp" property="phOptyp" jdbcType="VARCHAR" />
     <result column="ph_equi_r" property="phEquiR" jdbcType="VARCHAR" />
     <result column="ph_equi_x" property="phEquiX" jdbcType="VARCHAR" />
@@ -48,8 +50,8 @@
     <!--
       WARNING - @mbg.generated
     -->
-    id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name, ap_status, 
-    de_flg, ph_cname, pr_compan, bu_id, ph_prdlev, ph_devlev, cr_date, ch_date, pr_id, 
+    id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name,tree_phm, ap_status,
+    de_flg, ph_cname, pr_compan, bu_id, ph_prdlev, ph_devlev, cr_date, ch_date, pr_id, his_pr_id,
     ph_optyp, ph_equi_r, ph_equi_x, ph_equi_t, ca_typ, ca_typ_x, ca_typ_t, pr_bugets, 
     ph_prgets, pr_gettyp, ph_ma_typ, buget_flg, ph_od_flg, ph_delive, ph_landcl, arch_set, 
     hardc_set, lands_set, tax_typ

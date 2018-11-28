@@ -77,7 +77,7 @@
         <table schema="MirrorPhaseCThree" tableName="mirror_phase_c_three" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>-->
-        <table schema="MirrorPhaseCFour" tableName="mirror_phase_c_four" enableCountByExample="false" enableUpdateByExample="false"
+        <table schema="adptGroup" tableName="adpt_group" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
 

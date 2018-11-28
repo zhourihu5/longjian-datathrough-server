@@ -43,16 +43,17 @@ public class MirrorPhaseCFourServiceImpl implements MirrorPhaseCFourService {
     }
 
     /**
-     * 根据项目身份证获取信息
+     * 根据项目身份证 版本获取信息
      * @param prId
      * @return
      */
     @Override
     @LFAssignDataSource("custom01")
-    public MirrorPhaseCFour findByBuId(String prId) {
+    public MirrorPhaseCFour findByPhIdSapVer(String prId,String sapVer) {
 
         MirrorPhaseCFour mirrorPhaseCFour=new MirrorPhaseCFour();
         mirrorPhaseCFour.setPrId(prId);
+        mirrorPhaseCFour.setSapver(sapVer);
 
         return mirrorPhaseCFourMapper.selectOne(mirrorPhaseCFour);
     }

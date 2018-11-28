@@ -11,5 +11,5 @@ public interface MirrorPhaseCOneService {
 
    int  update(MirrorPhaseCOne mirrorPhaseCdc);
 
-   MirrorPhaseCOne findByBuId(String buId);
+   MirrorPhaseCOne findByPhIdSapVer(String phId,String  sapVer);
 }

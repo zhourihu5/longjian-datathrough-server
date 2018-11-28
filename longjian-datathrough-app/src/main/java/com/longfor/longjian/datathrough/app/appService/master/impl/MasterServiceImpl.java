@@ -4,20 +4,25 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.longjian.datathrough.app.appService.master.MasterService;
+import com.longfor.longjian.datathrough.app.util.DateUtil;
+import com.longfor.longjian.datathrough.consts.OperationEnum;
 import com.longfor.longjian.datathrough.domain.innerService.*;
 import com.longfor.longjian.datathrough.po.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.cxf.common.util.Base64Utility;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,17 +56,22 @@ public class MasterServiceImpl implements MasterService{
     @Resource
     private MirrorPhaseCFourService mirrorPhaseCFourService;
 
+    @Resource
+    private AdptPhaseService adptPhaseService;
+
+    @Resource
+    private AdptGroupService adptGroupService;
+
 
     /**
      * 同步项目
-     * @param systemId
-     * @param data
+     * @param jsonObject
      */
     @Override
-    public void excuteProject(String systemId, String data) {
-        JSONObject json = JSONArray.parseObject(data);
+    public void excuteProject(JSONObject jsonObject) {
+
         JSONObject result = new JSONObject();
-        JSONArray itemarry = json.getJSONArray("ItemArray"); //操作的数据集合
+        JSONArray itemarry = jsonObject.getJSONArray("ItemArray"); //操作的数据集合
         JSONArray errorArray = new JSONArray();
         Map<String,Object> map=relLhCompanyToCompanyService.getRelLhCompanyToCompanyMap();
         boolean hasError = false;
@@ -100,16 +110,14 @@ public class MasterServiceImpl implements MasterService{
 
     /**
      * 同步分期
-     * @param systemId
-     * @param data
+     * @param jsonObject
      */
     @Override
-    public void excuteStage(String systemId, String data) {
+    public void excuteStage(JSONObject jsonObject) {
 
-        JSONObject json = JSON.parseObject(data);
-        JSONArray itemarry = json.getJSONArray("ItemArray");
+        JSONArray itemarry = jsonObject.getJSONArray("ItemArray");
         JSONObject result = new JSONObject();
-        result.put("SystemID", "PPS");
+        result.put("SystemID", jsonObject.getString("SystemID"));
         JSONArray errorArray = new JSONArray();
         boolean hasError = false;
         for (int i = 0; i<itemarry.size(); i++) {
@@ -143,10 +151,10 @@ public class MasterServiceImpl implements MasterService{
 
     }
 
-
     /**
      * 项目操作
      * */
+    @Transactional
     private JSONObject operProject(JSONObject project,Map<String,Object>map) {
         JSONObject result = new JSONObject();
         String operCode = project.getString("OP_CODE").trim();//操作码
@@ -154,53 +162,37 @@ public class MasterServiceImpl implements MasterService{
         String projCode=project.getString("HIS_CODE").trim();//项目历史code
         String gsCode=project.getString("PR_REGID").trim();//公司code
         AdptProj adptProj=adptProjService.getByPrCode(projCode);
+        int num=-1;
         if("C".equals(operCode)) { // 新增
-                if (adptProj != null ) { // 项目已经存在
-                    if (adptProj.getLhXmname().equals(projName) == false) { // 名称更新了
-                        updateAptProject(adptProj,projName,gsCode);
-                        result.put("code", "200");
-                        result.put("message", projName + "修改成功");
-                    } else {
-                        result.put("code", "400");
-                        result.put("message", projName + "项目已存在");
-                    }
-                    return result;
-                }else {
-                    AdptProj newAdptProj=new AdptProj();
-                    newAdptProj.setLhXmcode(projCode);
-                    newAdptProj.setLhXmname(projName);
-                    newAdptProj.setLhGscode(gsCode);
-                    newAdptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
-                    newAdptProj.setGroupId(4);
-                    newAdptProj.setMenuType("1");
-                    newAdptProj.setCreateAt(new Date());
-                    newAdptProj.setUpdateAt(new Date());
-                   int num= adptProjService.createAdptProj(newAdptProj);
-
-                   insertResultStatus(num,projName,result);
-                   
-                }
-        } else if("U".equals(operCode)) { // 更新
-
-            if (adptProj != null&&adptProj.getLhXmname().equals(projName) == false) { // 名称更新了
-                updateAptProject(adptProj,projName,gsCode);
-                result.put("code", "200");
-                result.put("message", projName + "修改成功");
+            if (adptProj != null ) { // 项目已经存在
+                num=updateAptProject(adptProj,projName,gsCode);
+                result=updateResultStatus(num,projName,result);
             }else {
-                result.put("code", "400");
-                result.put("message", projName + " 名称和CODE无更新");
+                AdptProj newAdptProj=new AdptProj();
+                newAdptProj.setLhXmcode(projCode);
+                newAdptProj.setLhXmname(projName);
+                newAdptProj.setLhGscode(gsCode);
+                newAdptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
+                newAdptProj.setGroupId(4);
+                newAdptProj.setMenuType("1");
+                newAdptProj.setCreateAt(new Date());
+                newAdptProj.setUpdateAt(new Date());
+                num= adptProjService.createAdptProj(newAdptProj);
+                result=insertResultStatus(num,projName,result);
             }
+        } else if("U".equals(operCode)) { // 更新
+            num=updateAptProject(adptProj,projName,gsCode);
+            result=updateResultStatus(num,projName,result);
+
         } else if("D".equals(operCode)) { // 删除
             if (adptProj != null ) {
                 adptProj.setDeleteAt(new Date());
-                adptProjService.updateAdptProj(adptProj);
+                num=adptProjService.updateAdptProj(adptProj);
             }
-            result.put("code", "200");
-            result.put("message", projName + "删除成功");
+            result=deleteResultStatus(num,projName,result);
         }
         return result;
     }
-
 
     /**
      * 更新项目数据
@@ -208,239 +200,181 @@ public class MasterServiceImpl implements MasterService{
      * @param projName
      * @param gsCode
      */
-    private void  updateAptProject(AdptProj adptProj,String projName,String gsCode){
+    private int  updateAptProject(AdptProj adptProj,String projName,String gsCode){
             adptProj.setLhXmname(projName);
             adptProj.setLhGscode(gsCode);
             adptProj.setUpdateAt(new Date());
-            adptProjService.updateAdptProj(adptProj);
-    }
 
+           int num= adptProjService.updateAdptProj(adptProj);
+
+           return num;
+    }
 
     /**
      *按航道 处理分期数据
      * */
+    @Transactional
     private JSONObject operStage(JSONObject dujson) throws ParseException {
 
-        String operCode = dujson.getString("OP_CODE").trim();
+        log.debug("data====="+JSON.toJSONString(dujson));
+
+        String operCode = dujson.getString("OP_CODE").trim(); //C是新增  U是修改 D是删除
         String buId = dujson.getString("BU_ID").trim();//航道
-        String stageName=dujson.getString("PH_NAME");
-        String deFlg=dujson.getString("DE_FLG");//删除标记
+        String phId = dujson.getString("PH_ID").trim();//分期身份证
+        String sapVer = dujson.getString("SAP_VER").trim();//sap版本
+        String stageName = dujson.getString("TREE_PHM");//分期名称
+        String prId = dujson.getString("PR_ID").trim();//C4 项目身份证
         JSONObject result = new JSONObject();
 
-        if("C".equals(operCode)) { // 新增
+        Map<String,Object> map=relLhCompanyToCompanyService.getRelLhCompanyToCompanyMap();
+        int num = -1;
+        if ("C1".equals(buId)) {//如果航道是C1
+            MirrorPhaseCOne oldMirrorPhaseCOne = mirrorPhaseCOneService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
 
-            if("C1".equals(buId)){//如果航道是C1
-              MirrorPhaseCOne oldMirrorPhaseCOne=  mirrorPhaseCOneService.findByBuId(buId);
-              if(oldMirrorPhaseCOne!=null){
-                  result.put("code", "400");
-                  result.put("message", oldMirrorPhaseCOne.getPhName() + "已存在");
-              }else{
-                  int num =saveOrUpdateMirrorPhaseCOne(dujson,0,0,null);
-
-                  insertResultStatus(num,stageName,result);
-
-              }
-            }else if("C2".equals(buId)){//如果航道是C2
-                MirrorPhaseCTwo oldMirrorPhaseCTwo=  mirrorPhaseCTwoService.findByBuId(buId);
-                if(oldMirrorPhaseCTwo!=null){
-                    result.put("code", "400");
-                    result.put("message", oldMirrorPhaseCTwo.getPhName() + "已存在");
-                }else{
-                    int num =saveOrUpdateMirrorPhaseCTwo(dujson,0,0,null);
-
-                    insertResultStatus(num,stageName,result);
+            if ("C".equals(operCode)) { // 新增
+                if (oldMirrorPhaseCOne != null) {
+                    num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCOne.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
                 }
-            }else if("C3".equals(buId)){//如果航道是C3
-                MirrorPhaseCThree oldMirrorPhaseCThree=  mirrorPhaseCThreeService.findByBuId(buId);
-                if(oldMirrorPhaseCThree!=null){
-                    result.put("code", "400");
-                    result.put("message", oldMirrorPhaseCThree.getPhName() + "已存在");
-                }else{
-                    int num =saveOrUpdateMirrorPhaseCThree(dujson,0,0,null);
-
-                    insertResultStatus(num,stageName,result);
-                }
-            }else if("C4".equals(buId)){//如果航道是C4
-                MirrorPhaseCFour oldMirrorPhaseCFour=  mirrorPhaseCFourService.findByBuId(buId);
-                if(oldMirrorPhaseCFour!=null){
-                    result.put("code", "400");
-                    result.put("message", oldMirrorPhaseCFour.getPrName() + "已存在");
-                }else{
-                    int num =saveOrUpdateMirrorPhaseCFour(dujson,0,0,null);
-
-                    insertResultStatus(num,stageName,result);
-                }
+            } else if ("U".equals(operCode)) {//修改
+                num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCOne.getId(),map);//更新操作
+                result = updateResultStatus(num, stageName, result);
+            } else if ("D".equals(operCode)) {//删除
+                num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCOne.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
             }
 
-        } else if("U".equals(operCode)) { // 更新分期
-            if("C1".equals(buId)){
-
-                MirrorPhaseCOne oldMirrorPhaseCOne=  mirrorPhaseCOneService.findByBuId(buId);
-
-                int num =saveOrUpdateMirrorPhaseCOne(dujson,1,oldMirrorPhaseCOne.getId(),null);
-
-                updateResultStatus(num,stageName,result);
-
-            }if("C2".equals(buId)){
-
-                MirrorPhaseCTwo oldMirrorPhaseCTwo=  mirrorPhaseCTwoService.findByBuId(buId);
-
-                int num =saveOrUpdateMirrorPhaseCTwo(dujson,1,oldMirrorPhaseCTwo.getId(),null);
-
-                updateResultStatus(num,stageName,result);
-
-            }if("C3".equals(buId)){
-
-                MirrorPhaseCThree oldMirrorPhaseCThree=  mirrorPhaseCThreeService.findByBuId(buId);
-
-                int num =saveOrUpdateMirrorPhaseCThree(dujson,1,oldMirrorPhaseCThree.getId(),null);
-
-                updateResultStatus(num,stageName,result);
-
-            }if("C1".equals(buId)){
-
-                MirrorPhaseCFour oldMirrorPhaseCFour=  mirrorPhaseCFourService.findByBuId(buId);
-
-                int num =saveOrUpdateMirrorPhaseCFour(dujson,1,oldMirrorPhaseCFour.getId(),null);
-
-                updateResultStatus(num,stageName,result);
+        }else if("C2".equals(buId)) {//如果航道是C2
+            MirrorPhaseCTwo oldMirrorPhaseCTwo = mirrorPhaseCTwoService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)) { // 新增
+                if (oldMirrorPhaseCTwo != null) {
+                    num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCTwo.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            } else if ("U".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCTwo.getId(),map);//更新操作
+                result = updateResultStatus(num, stageName, result);
+            } else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCTwo.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
             }
-
-        } else if("D".equals(operCode)) {
-
-            if("C1".equals(buId)) {
-
-                MirrorPhaseCOne oldMirrorPhaseCOne = mirrorPhaseCOneService.findByBuId(buId);
-
-                oldMirrorPhaseCOne.setDeFlg(deFlg);
-
-                int num = saveOrUpdateMirrorPhaseCOne(dujson, 2, oldMirrorPhaseCOne.getId(), deFlg);
-
-                deleteResultStatus(num,stageName,result);
-
-            }else if("C2".equals(buId)) {
-
-                MirrorPhaseCTwo oldMirrorPhaseCTwo = mirrorPhaseCTwoService.findByBuId(buId);
-
-                oldMirrorPhaseCTwo.setDeFlg(deFlg);
-
-                int num = saveOrUpdateMirrorPhaseCTwo(dujson, 2, oldMirrorPhaseCTwo.getId(), deFlg);
-
-                deleteResultStatus(num,stageName,result);
-            }else if("C3".equals(buId)) {
-
-                MirrorPhaseCThree oldMirrorPhaseCThree = mirrorPhaseCThreeService.findByBuId(buId);
-
-                oldMirrorPhaseCThree.setDeFlg(deFlg);
-
-                int num = saveOrUpdateMirrorPhaseCThree(dujson, 2, oldMirrorPhaseCThree.getId(), deFlg);
-
-                deleteResultStatus(num,stageName,result);
-
-            }else if("C4".equals(buId)) {
-
-                MirrorPhaseCFour oldMirrorPhaseCFour = mirrorPhaseCFourService.findByBuId(buId);
-
-                oldMirrorPhaseCFour.setDeFlg(deFlg);
-
-                int num = saveOrUpdateMirrorPhaseCFour(dujson, 2, oldMirrorPhaseCFour.getId(), deFlg);
-
-                deleteResultStatus(num,stageName,result);
+        }else if("C3".equals(buId)) {//如果航道是C3
+            MirrorPhaseCThree oldMirrorPhaseCThree = mirrorPhaseCThreeService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)) { // 新增
+                if (oldMirrorPhaseCThree != null) {
+                    num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCThree.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            } else if ("U".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCThree.getId(),map);//更新操作
+                result = updateResultStatus(num, stageName, result);
+            } else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCThree.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
+            }
+        }else if("C4".equals(buId)) {//如果航道是C4
+            MirrorPhaseCFour oldMirrorPhaseCFour = mirrorPhaseCFourService.findByPhIdSapVer(prId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)) { // 新增
+                if (oldMirrorPhaseCFour != null) {
+                    num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCFour.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            } else if ("U".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCFour.getId(),map);//更新操作
+                result = updateResultStatus(num, stageName, result);
+            } else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCFour.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
             }
         }
+
         JSONArray groups = dujson.getJSONArray("GroupArray");//组团
 
         // 处理分期下组团
-        if(groups != null ) {
-            for (int j = 0; j< groups.size(); j++) {
-                /*JSONObject groupResult = operGroup(operCode, buId, groups.getJSONObject(j));
-                if("200".equals(groupResult.getString("code"))) {
-                    result.put("group:"+groups.getJSONObject(j).getString("GR_ID"), "200");
-                } else {
-                    result.put("group:"+groups.getJSONObject(j).getString("GR_ID"), "400");
-                    result.put(groups.getJSONObject(j).getString("GR_ID"), groupResult.getString("message"));
-                    if (result.has("message")) {
-                        result.put("message", result.getString("message")+";"+groupResult.getString("message"));
-                    } else {
-                        result.put("message", groupResult.getString("message"));
-                    }
-                }*/
-            }
+        if(groups != null &&groups.size()>0 ) {
+            num=saveOrUpdateAdptGroup(groups,phId);
+            result=saveOrUpdateGroupResultStatus(num,result);
         }
-
         return result;
     }
 
     /**
-     * 新增C1 分期数据
+     * 操作C1数据
      * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
      * @return
      * @throws ParseException
      */
-    private int saveOrUpdateMirrorPhaseCOne(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+    private int saveOrUpdateMirrorPhaseCOne(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
 
-        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
 
-        MirrorPhaseCOne mirrorPhaseCdc=new MirrorPhaseCOne();
-        mirrorPhaseCdc.setPhId(dujson.getString("PH_ID"));
-        mirrorPhaseCdc.setSapVer(dujson.getString("SAP_VER"));
-        mirrorPhaseCdc.setVerNam(dujson.getString("VER_NAM"));
-        mirrorPhaseCdc.setHisCode(dujson.getString("HIS_CODE"));
-        mirrorPhaseCdc.setHisIcard(dujson.getString("HIS_ICARD"));
-        mirrorPhaseCdc.setHisGuid(dujson.getString("HIS_GUID"));
-        mirrorPhaseCdc.setHisFlg(dujson.getString("HIS_FLG"));
-        mirrorPhaseCdc.setPhName(dujson.getString("PH_NAME"));
-        mirrorPhaseCdc.setApStatus(dujson.getString("AP_STATUS"));
-        mirrorPhaseCdc.setDeFlg(dujson.getString("DE_FLG"));
-        mirrorPhaseCdc.setPhCname(dujson.getString("PH_CNAME"));
-        mirrorPhaseCdc.setPrCompan(dujson.getString("PR_COMPAN"));
-        mirrorPhaseCdc.setBuId(dujson.getString("BU_ID"));
-        mirrorPhaseCdc.setPhPrdlev(dujson.getString("PH_PRDLEV"));
-        mirrorPhaseCdc.setPhDevlev(dujson.getString("PH_DEVLEV"));
-        mirrorPhaseCdc.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
-        mirrorPhaseCdc.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
-        mirrorPhaseCdc.setPrId(dujson.getString("PR_ID"));
-        mirrorPhaseCdc.setPhOptyp(dujson.getString("PH_OPTYP"));
-        mirrorPhaseCdc.setPhEquiR(dujson.getString("PH_EQUI_R"));
-        mirrorPhaseCdc.setPhEquiX(dujson.getString("PH_EQUI_X"));
-        mirrorPhaseCdc.setPhEquiT(dujson.getString("PH_EQUI_T"));
-        mirrorPhaseCdc.setCaTyp(dujson.getString("CA_TYP"));
-        mirrorPhaseCdc.setCaTypX(dujson.getString("CA_TYP_X"));
-        mirrorPhaseCdc.setCaTypT(dujson.getString("CA_TYP_T"));
-        mirrorPhaseCdc.setPrBugets(dujson.getString("PR_BUGETS"));
-        mirrorPhaseCdc.setPhPrgets(dujson.getString("PH_PRGETS"));
-        mirrorPhaseCdc.setPrGettyp(dujson.getString("PR_GETTYP"));
-        mirrorPhaseCdc.setPhMaTyp(dujson.getString("PH_MA_TYP"));
-        mirrorPhaseCdc.setBugetFlg(dujson.getString("BUGET_FLG"));
-        mirrorPhaseCdc.setPhDelive(dateFormatter.parse(dujson.getString("PH_DELIVE")));
-        mirrorPhaseCdc.setPhLandcl(dujson.getString("PH_LANDCL"));
+        MirrorPhaseCOne mirrorPhaseCOne=new MirrorPhaseCOne();
+        mirrorPhaseCOne.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseCOne.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseCOne.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseCOne.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseCOne.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseCOne.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseCOne.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseCOne.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCOne.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseCOne.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseCOne.setPhCname(dujson.getString("PH_CNAME"));
+        mirrorPhaseCOne.setTreePhm(dujson.getString("TREE_PHM"));
+        mirrorPhaseCOne.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseCOne.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseCOne.setPhPrdlev(dujson.getString("PH_PRDLEV"));
+        mirrorPhaseCOne.setPhDevlev(dujson.getString("PH_DEVLEV"));
+        mirrorPhaseCOne.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseCOne.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
+        mirrorPhaseCOne.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCOne.setHisPrId(dujson.getString("HIS_PRID"));
+        mirrorPhaseCOne.setPhOptyp(dujson.getString("PH_OPTYP"));
+        mirrorPhaseCOne.setPhEquiR(dujson.getString("PH_EQUI_R"));
+        mirrorPhaseCOne.setPhEquiX(dujson.getString("PH_EQUI_X"));
+        mirrorPhaseCOne.setPhEquiT(dujson.getString("PH_EQUI_T"));
+        mirrorPhaseCOne.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseCOne.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseCOne.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseCOne.setPrBugets(dujson.getString("PR_BUGETS"));
+        mirrorPhaseCOne.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseCOne.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseCOne.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseCOne.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseCOne.setPhDelive(DateUtil.stampToDate(dujson.getString("PH_DELIVE")));
+        mirrorPhaseCOne.setPhLandcl(dujson.getString("PH_LANDCL"));
 
-        mirrorPhaseCdc.setArchSet(dujson.getString("ARCH_SET"));
-        mirrorPhaseCdc.setHardcSet(dujson.getString("HARDC_SET"));
-        mirrorPhaseCdc.setLandsSet(dujson.getString("LANDS_SET"));
-        mirrorPhaseCdc.setTaxTyp(dujson.getString("TAX_TYP"));
-        int num;
-        if(0==type){//新增
-            num= mirrorPhaseCOneService.insert(mirrorPhaseCdc);
-        }else if(1==type) {//修改
-            mirrorPhaseCdc.setId(id);
-            num= mirrorPhaseCOneService.update(mirrorPhaseCdc);
-        }else{//删除
-            mirrorPhaseCdc.setDeFlg(deFlg);
-            num= mirrorPhaseCOneService.update(mirrorPhaseCdc);
-        }
+        mirrorPhaseCOne.setArchSet(dujson.getString("ARCH_SET"));
+        mirrorPhaseCOne.setHardcSet(dujson.getString("HARDC_SET"));
+        mirrorPhaseCOne.setLandsSet(dujson.getString("LANDS_SET"));
+        mirrorPhaseCOne.setTaxTyp(dujson.getString("TAX_TYP"));
+        int num =saveOrUpdateMirrorPhase(mirrorPhaseCOne,id,type,map);
         return  num;
     }
 
     /**
-     * 新增C2 分期数据
+     * 操作C2数据
      * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
      * @return
      * @throws ParseException
      */
-    private int saveOrUpdateMirrorPhaseCTwo(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+    private int saveOrUpdateMirrorPhaseCTwo(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
 
-        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
 
         MirrorPhaseCTwo mirrorPhaseCTwo=new MirrorPhaseCTwo();
         mirrorPhaseCTwo.setPhId(dujson.getString("PH_ID"));
@@ -451,6 +385,7 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCTwo.setHisGuid(dujson.getString("HIS_GUID"));
         mirrorPhaseCTwo.setHisFlg(dujson.getString("HIS_FLG"));
         mirrorPhaseCTwo.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCTwo.setTreePhm(dujson.getString("TREE_PHM"));
         mirrorPhaseCTwo.setApStatus(dujson.getString("AP_STATUS"));
         mirrorPhaseCTwo.setDeFlg(dujson.getString("DE_FLG"));
         mirrorPhaseCTwo.setPhCname(dujson.getString("PH_CNAME"));
@@ -463,9 +398,10 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCTwo.setPrBugets(dujson.getString("PR_BUGETS"));
         mirrorPhaseCTwo.setPhPrdlev(dujson.getString("PH_PRDLEV"));
         mirrorPhaseCTwo.setPhDevlev(dujson.getString("PH_DEVLEV"));
-        mirrorPhaseCTwo.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
-        mirrorPhaseCTwo.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCTwo.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseCTwo.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
         mirrorPhaseCTwo.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCTwo.setHisPrId(dujson.getString("HIS_PRID"));
         mirrorPhaseCTwo.setPhOtypD(dujson.getString("PH_OTYP_D"));
         mirrorPhaseCTwo.setPhOtypO(dujson.getString("PH_OTYP_O"));
         mirrorPhaseCTwo.setPhEqRD(dujson.getString("PH_EQ_R_D"));
@@ -481,7 +417,7 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCTwo.setPrGettyp(dujson.getString("PR_GETTYP"));
         mirrorPhaseCTwo.setPhMaTyp(dujson.getString("PH_MA_TYP"));
         mirrorPhaseCTwo.setBugetFlg(dujson.getString("BUGET_FLG"));
-        mirrorPhaseCTwo.setPhOpenD(dateFormatter.parse(dujson.getString("PH_OPEN_D")));
+        mirrorPhaseCTwo.setPhOpenD(DateUtil.stampToDate(dujson.getString("PH_OPEN_D")));
         mirrorPhaseCTwo.setPhLandcl(dujson.getString("PH_LANDCL"));
         mirrorPhaseCTwo.setTaxTyp(dujson.getString("TAX_TYP"));
         mirrorPhaseCTwo.setPhMeFlg(dujson.getString("PH_ME_FLG"));
@@ -492,28 +428,21 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCTwo.setPhDevsta(dujson.getString("PH_DEVSTA"));
 
 
-        int num;
-        if(0==type){//新增
-            num= mirrorPhaseCTwoService.insert(mirrorPhaseCTwo);
-        }else if(1==type) {//修改
-            mirrorPhaseCTwo.setId(id);
-            num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
-        }else{//删除
-            mirrorPhaseCTwo.setDeFlg(deFlg);
-            num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
-        }
+        int num=saveOrUpdateMirrorPhase(mirrorPhaseCTwo,id,type,map);
+
         return  num;
     }
 
     /**
-     * 新增C3 分期数据
+     * 操作C3数据
      * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
      * @return
      * @throws ParseException
      */
-    private int saveOrUpdateMirrorPhaseCThree(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+    private int saveOrUpdateMirrorPhaseCThree(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
 
-        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
 
         MirrorPhaseCThree mirrorPhaseCThree=new MirrorPhaseCThree();
         mirrorPhaseCThree.setPhId(dujson.getString("PH_ID"));
@@ -524,15 +453,17 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCThree.setHisGuid(dujson.getString("HIS_GUID"));
         mirrorPhaseCThree.setHisFlg(dujson.getString("HIS_FLG"));
         mirrorPhaseCThree.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseCThree.setTreePhm(dujson.getString("TREE_PHM"));
         mirrorPhaseCThree.setApStatus(dujson.getString("AP_STATUS"));
         mirrorPhaseCThree.setDeFlg(dujson.getString("DE_FLG"));
         mirrorPhaseCThree.setPrType(dujson.getString("PR_TYPE"));
         mirrorPhaseCThree.setPrCompan(dujson.getString("PR_COMPAN"));
 
         mirrorPhaseCThree.setBuId(dujson.getString("BU_ID"));
-        mirrorPhaseCThree.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
-        mirrorPhaseCThree.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCThree.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseCThree.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
         mirrorPhaseCThree.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseCThree.setHisPrId(dujson.getString("HIS_PRID"));
         mirrorPhaseCThree.setPhOptyp(dujson.getString("PH_OPTYP"));
 
         mirrorPhaseCThree.setCaTyp(dujson.getString("CA_TYP"));
@@ -554,44 +485,36 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCThree.setPrGettyp(dujson.getString("PR_GETTYP"));
         mirrorPhaseCThree.setPhMaTyp(dujson.getString("PH_MA_TYP"));
         mirrorPhaseCThree.setPhPrgets(dujson.getString("PH_PRGETS"));
-        mirrorPhaseCThree.setPhOpenD(dateFormatter.parse(dujson.getString("PH_OPEN_D")));
+        mirrorPhaseCThree.setPhOpenD(DateUtil.stampToDate(dujson.getString("PH_OPEN_D")));
         mirrorPhaseCThree.setPrBugets(dujson.getString("PR_BUGETS"));
 
         mirrorPhaseCThree.setPhRnlev(dujson.getString("PH_RNLEV"));
         mirrorPhaseCThree.setPhFlplan(dujson.getString("PH_FLPLAN"));
 
         mirrorPhaseCThree.setPhLeaper(Integer.parseInt(dujson.getString("PH_LEAPER")));
-        mirrorPhaseCThree.setPhRenSd(dateFormatter.parse(dujson.getString("PH_REN_SD")));
-        mirrorPhaseCThree.setPhRenEd(dateFormatter.parse(dujson.getString("PH_REN_ED")));
+        mirrorPhaseCThree.setPhRenSd(DateUtil.stampToDate(dujson.getString("PH_REN_SD")));
+        mirrorPhaseCThree.setPhRenEd(DateUtil.stampToDate(dujson.getString("PH_REN_ED")));
         mirrorPhaseCThree.setPhShpadr(dujson.getString("PH_SHPADR"));
         mirrorPhaseCThree.setPhOpname(dujson.getString("PH_OPNAME"));
         mirrorPhaseCThree.setPhOpid(dujson.getString("PH_OPID"));
         mirrorPhaseCThree.setConstype(dujson.getString("CONSTYPE"));
         mirrorPhaseCThree.setPhShFlg(dujson.getString("PH_SH_FLG"));
 
-        int num;
-        if(0==type){//新增
-            num= mirrorPhaseCThreeService.insert(mirrorPhaseCThree);
-        }else if(1==type) {//修改
-            mirrorPhaseCThree.setId(id);
-            num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
-        }else{//删除
-            mirrorPhaseCThree.setDeFlg(deFlg);
-            num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
-        }
+        int num=saveOrUpdateMirrorPhase(mirrorPhaseCThree,id,type,map);
+
         return  num;
     }
 
-
     /**
-     * 新增C4 数据
+     * 操作C4数据
      * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
      * @return
      * @throws ParseException
      */
-    private int saveOrUpdateMirrorPhaseCFour(JSONObject dujson,int type,int id,String deFlg) throws ParseException {
+    private int saveOrUpdateMirrorPhaseCFour(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
 
-        DateFormat dateFormatter = DateFormat.getDateTimeInstance();
 
         MirrorPhaseCFour mirrorPhaseCFour = new MirrorPhaseCFour();
         mirrorPhaseCFour.setPrId(dujson.getString("PR_ID"));
@@ -603,26 +526,177 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCFour.setBuId(dujson.getString("BU_ID"));
         mirrorPhaseCFour.setPrAddr(dujson.getString("PR_ADDR"));
         mirrorPhaseCFour.setPrDistr(dujson.getString("PR_DISTR"));
-        mirrorPhaseCFour.setCrDate(dateFormatter.parse(dujson.getString("CR_DATE")));
-        mirrorPhaseCFour.setChDate(dateFormatter.parse(dujson.getString("CH_DATE")));
+        mirrorPhaseCFour.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseCFour.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
         mirrorPhaseCFour.setTakeDate(dujson.getString("TAKE_DATE"));
         mirrorPhaseCFour.setPrType(dujson.getString("PR_TYPE"));
         mirrorPhaseCFour.setServlev(dujson.getString("SERVLEV"));
         mirrorPhaseCFour.setTakeType(dujson.getString("TAKE_TYPE"));
         mirrorPhaseCFour.setDeFlg(dujson.getString("DE_FLG"));
 
-        int num;
-        if(0==type){//新增
-            num= mirrorPhaseCFourService.insert(mirrorPhaseCFour);
-        }else if(1==type) {//修改
-            mirrorPhaseCFour.setId(id);
-            num= mirrorPhaseCFourService.update(mirrorPhaseCFour);
-        }else{//删除
-            mirrorPhaseCFour.setDeFlg(deFlg);
-            num= mirrorPhaseCFourService.update(mirrorPhaseCFour);
-        }
+        int num=saveOrUpdateMirrorPhase(mirrorPhaseCFour,id,type,map);
         return  num;
 
+    }
+
+    /**
+     * 操作 业务分期表
+     * @param object
+     * @param type
+     * @param map
+     * @return
+     */
+    private  int saveOrUpdateAdptPhase(Object object,String type,Map<String,Object>map){
+
+        AdptPhase adptPhase=new AdptPhase();
+
+        AdptProj adptProj= new AdptProj();
+
+        if(object instanceof MirrorPhaseCOne){
+            MirrorPhaseCOne mirrorPhaseCOne=(MirrorPhaseCOne) object;
+            adptProj= adptProjService.getByPrCode(mirrorPhaseCOne.getHisPrId());//根据项目code获取项目信息
+            adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCOne.getHisCode(),adptProj.getLhXmcode());
+            if(adptPhase==null){
+                adptPhase=new AdptPhase();
+            }
+            adptPhase.setLhFqname(mirrorPhaseCOne.getTreePhm());
+            adptPhase.setLhFqcode(mirrorPhaseCOne.getHisCode());
+        }
+        if(object instanceof MirrorPhaseCTwo){
+            MirrorPhaseCTwo mirrorPhaseCTwo=(MirrorPhaseCTwo) object;
+            adptProj= adptProjService.getByPrCode(mirrorPhaseCTwo.getHisPrId());//根据项目code获取项目信息
+            adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCTwo.getHisCode(),adptProj.getLhXmcode());
+            if(adptPhase==null){
+                adptPhase=new AdptPhase();
+            }
+            adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
+            adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
+        }
+
+        if(object instanceof MirrorPhaseCThree){
+            MirrorPhaseCThree mirrorPhaseCTwo=(MirrorPhaseCThree) object;
+            adptProj= adptProjService.getByPrCode(mirrorPhaseCTwo.getHisPrId());//根据项目code获取项目信息
+            adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCTwo.getHisCode(),adptProj.getLhXmcode());
+            if(adptPhase==null){
+                adptPhase=new AdptPhase();
+            }
+            adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
+            adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
+        }
+
+        adptPhase.setGroupId(4);
+        adptPhase.setLhXmcode(adptProj.getLhXmcode());
+        adptPhase.setLhGscode(adptProj.getLhGscode());
+        adptPhase.setMenuType("1");
+        adptPhase.setCompanyId(Integer.parseInt(String.valueOf(map.get(adptProj.getLhGscode()))));
+
+        int num=-1;
+        if(OperationEnum.ADD.getType().equals(type)){
+            adptPhase.setCreateAt(new Date());
+            adptPhase.setUpdateAt(new Date());
+            num=adptPhaseService.insert(adptPhase);
+        }else if(OperationEnum.UPDATE.getType().equals(type)){
+            adptPhase.setUpdateAt(new Date());
+            num=adptPhaseService.update(adptPhase);
+        }else{
+            adptPhase.setDeleteAt(new Date());
+            num=adptPhaseService.update(adptPhase);
+        }
+        return num;
+    }
+
+    /**
+     * 操作 分期过程表
+     * @param object
+     * @param id
+     * @param type
+     * @param map
+     * @return
+     */
+    private int saveOrUpdateMirrorPhase(Object object,int id,String type,Map<String,Object>map){
+        int num =-1;
+        if(object instanceof MirrorPhaseCOne){
+            MirrorPhaseCOne mirrorPhaseCOne=(MirrorPhaseCOne) object;
+
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseCOneService.insert(mirrorPhaseCOne);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseCOne.setId(id);
+                num= mirrorPhaseCOneService.update(mirrorPhaseCOne);
+            }else{//删除
+                mirrorPhaseCOne.setId(id);
+                num= mirrorPhaseCOneService.update(mirrorPhaseCOne);
+            }
+            if(num!=-1){//如果操作过程表成功  则调用业务表接口 操作业务表
+                num= saveOrUpdateAdptPhase(mirrorPhaseCOne,type,map);
+            }
+        }
+        if(object instanceof MirrorPhaseCTwo){
+            MirrorPhaseCTwo mirrorPhaseCTwo=(MirrorPhaseCTwo) object;
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseCTwoService.insert(mirrorPhaseCTwo);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseCTwo.setId(id);
+                num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
+            }else{//删除
+                mirrorPhaseCTwo.setId(id);
+                num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
+            }
+            if(num!=-1){
+                num= saveOrUpdateAdptPhase(mirrorPhaseCTwo,type,map);
+            }
+        }
+
+        if(object instanceof MirrorPhaseCThree){
+            MirrorPhaseCThree mirrorPhaseCThree=(MirrorPhaseCThree) object;
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseCThreeService.insert(mirrorPhaseCThree);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseCThree.setId(id);
+                num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
+            }else{//删除
+                mirrorPhaseCThree.setId(id);
+                num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
+            }
+            if(num!=-1){
+                num= saveOrUpdateAdptPhase(mirrorPhaseCThree,type,map);
+            }
+        }
+        return  num;
+    }
+
+    /**
+     * 操作  组团表
+     * @param jsonArray
+     * @param phId
+     * @return
+     */
+    @Transactional
+    private int saveOrUpdateAdptGroup(JSONArray jsonArray,String phId){
+
+        List<AdptGroup> adptGroupList=new ArrayList<>();
+
+        for(int i=0;i<jsonArray.size();i++){
+            JSONObject jsonObject=jsonArray.getJSONObject(i);
+
+            AdptGroup adptGroup=new AdptGroup();
+            adptGroup.setPhId(phId);
+            adptGroup.setDeFlg(jsonObject.getString("DE_FLG"));
+            adptGroup.setGrCname(jsonObject.getString("GR_NAME"));
+            adptGroup.setGrId(jsonObject.getString("GR_ID"));
+            adptGroup.setHisFlg(jsonObject.getString("HIS_FLG"));
+            adptGroup.setHisId(jsonObject.getString("HIS_ID"));
+            adptGroup.setGrName(jsonObject.getString("GR_NAME"));
+            adptGroup.setCreateAt(new Date());
+            adptGroup.setUpdateAt(new Date());
+            adptGroupList.add(adptGroup);
+        }
+
+        adptGroupService.delByPhId(phId);//按照分期身份证删除组团数据
+
+        int num= adptGroupService.insertList(adptGroupList);//批量插入组团数据
+
+        return num;
     }
 
 
@@ -633,15 +707,14 @@ public class MasterServiceImpl implements MasterService{
      */
     private void executorCallBack(String body, boolean error) {
         RestTemplate restTemplate=new RestTemplate();
-        //String userAndPass = "PPSUSER:PPS12345"; //测试环境(10.49)
-        String userAndPass = "PPSUSER:$jLVrn^8"; //生产环境(10.37)
+        String userAndPass = "LASUSER:LAS12345"; //测试环境(10.49)
+        //String userAndPass = "LASUSER:$jLVrn^8"; //生产环境(10.37)
         HttpHeaders headers = new HttpHeaders();
 
-        // 待修正
-       // headers.add("Authorization", "Basic " +  Base64Utility.encode(userAndPass.getBytes()));
+        headers.add("Authorization", "Basic " +  Base64Utility.encode(userAndPass.getBytes()));
         headers.add("Content-Type","text/plain;charset=UTF-8");
         HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-        System.out.println("body==" + body);
+        log.debug("body==" + body);
 		/* body是Http消息体例如json串 */
         log.debug(mdmSuccess);
         log.debug(mdmError);
@@ -654,18 +727,34 @@ public class MasterServiceImpl implements MasterService{
     }
 
     /**
-     * 新增分期 返回成功或者失败
+     * 新增项目/分期 返回成功或者失败
      * @param num
-     * @param stageName
+     * @param name
      * @return
      */
-    private JSONObject insertResultStatus( int num,String stageName ,JSONObject result){
+    private JSONObject insertResultStatus( int num,String name ,JSONObject result){
         if(-1==num) {
             result.put("code", "500");
-            result.put("message", stageName + "创建失败");
+            result.put("message", name + "创建失败");
         }else {
             result.put("code", "200");
-            result.put("message", stageName + "创建成功");
+            result.put("message", name + "创建成功");
+        }
+        return result;
+    }
+
+    /**
+     * 处理组团数据 返回成功或者失败
+     * @param num
+     * @return
+     */
+    private JSONObject saveOrUpdateGroupResultStatus( int num,JSONObject result){
+        if(-1==num) {
+            result.put("code", "500");
+            result.put("message",  "处理组团数据失败");
+        }else {
+            result.put("code", "200");
+            result.put("message", "处理组团数据成功");
         }
         return result;
     }

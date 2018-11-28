@@ -1,11 +1,15 @@
 package com.longfor.longjian.datathrough.po;
 
+import com.longfor.longjian.datathrough.domain.innerService.PhaseService;
+import tk.mybatis.mapper.annotation.KeySql;
+
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "mirror_phase_c_one")
-public class MirrorPhaseCOne {
+public class MirrorPhaseCOne implements PhaseService {
     @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     /**
@@ -75,6 +79,13 @@ public class MirrorPhaseCOne {
     private String phCname;
 
     /**
+     * 主数据分期名称
+     */
+    @Column(name="tree_phm")
+    private String treePhm;
+
+
+    /**
      * 项目公司
      */
     @Column(name = "pr_compan")
@@ -115,6 +126,12 @@ public class MirrorPhaseCOne {
      */
     @Column(name = "pr_id")
     private String prId;
+
+    /**
+     * 历史项目code
+     */
+    @Column(name="his_pr_id")
+    private String hisPrId;
 
     /**
      * 操盘类型
@@ -908,5 +925,21 @@ public class MirrorPhaseCOne {
      */
     public void setTaxTyp(String taxTyp) {
         this.taxTyp = taxTyp == null ? null : taxTyp.trim();
+    }
+
+    public String getHisPrId() {
+        return hisPrId;
+    }
+
+    public void setHisPrId(String hisPrId) {
+        this.hisPrId = hisPrId;
+    }
+
+    public String getTreePhm() {
+        return treePhm;
+    }
+
+    public void setTreePhm(String treePhm) {
+        this.treePhm = treePhm;
     }
 }

@@ -16,7 +16,7 @@ spring:
 logging:
   level:
     ROOT: WARN
-    com.longfor: INFO
+    com.longfor: DEBUG
 
 management:
   security:

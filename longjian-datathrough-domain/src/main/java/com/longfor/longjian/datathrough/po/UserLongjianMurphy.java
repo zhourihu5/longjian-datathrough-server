@@ -1,11 +1,14 @@
 package com.longfor.longjian.datathrough.po;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "user_longjian_murphy")
 public class UserLongjianMurphy {
     @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     /**

@@ -11,5 +11,5 @@ public interface MirrorPhaseCThreeService {
 
     int  update(MirrorPhaseCThree mirrorPhaseCThree);
 
-    MirrorPhaseCThree findByBuId(String buId);
+    MirrorPhaseCThree findByPhIdSapVer(String phId,String sapVer);
 }

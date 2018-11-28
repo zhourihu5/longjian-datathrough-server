@@ -1,5 +1,7 @@
 package com.longfor.longjian.datathrough.po;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
 import java.util.Date;
 import javax.persistence.*;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 public class AdptProj {
     @Id
     @Column(name = "auto_id")
+    @KeySql(useGeneratedKeys = true)
     private Integer autoId;
 
     @Column(name = "group_id")

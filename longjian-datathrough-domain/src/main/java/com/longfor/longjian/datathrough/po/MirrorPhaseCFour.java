@@ -1,11 +1,15 @@
 package com.longfor.longjian.datathrough.po;
 
+import com.longfor.longjian.datathrough.domain.innerService.PhaseService;
+import tk.mybatis.mapper.annotation.KeySql;
+
 import java.util.Date;
 import javax.persistence.*;
 
 @Table(name = "mirror_phase_c_four")
-public class MirrorPhaseCFour {
+public class MirrorPhaseCFour implements PhaseService {
     @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     /**

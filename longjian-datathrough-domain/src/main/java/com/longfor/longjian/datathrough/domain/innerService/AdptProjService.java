@@ -8,7 +8,7 @@ import com.longfor.longjian.datathrough.po.AdptProj;
 public interface AdptProjService {
 
     AdptProj getByPrCode(String PrCode);
-    void updateAdptProj(AdptProj adptProj);
+    int updateAdptProj(AdptProj adptProj);
 
     int createAdptProj(AdptProj adptProj);
 }

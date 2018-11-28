@@ -1,11 +1,14 @@
 package com.longfor.longjian.datathrough.po;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
 import java.util.Date;
 import javax.persistence.*;
 
 public class User {
     @Id
     @Column(name = "user_id")
+    @KeySql(useGeneratedKeys = true)
     private Integer userId;
 
     @Column(name = "group_code")

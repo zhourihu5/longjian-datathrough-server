@@ -42,18 +42,19 @@ public class MirrorPhaseCTwoServiceImpl implements MirrorPhaseCTwoService {
     }
 
     /**
-     * 根据分期身份证获取分期信息
+     * 根据分期身份证 版本获取分期信息
      * @param phId
      * @return
      */
     @Override
     @LFAssignDataSource("custom01")
-    public MirrorPhaseCTwo findByBuId(String phId) {
+    public MirrorPhaseCTwo findByPhIdSapVer(String phId,String sapVer) {
 
-        MirrorPhaseCTwo mirrorPhaseCdc=new MirrorPhaseCTwo();
-        mirrorPhaseCdc.setPhId(phId);
+        MirrorPhaseCTwo mirrorPhaseCTwo=new MirrorPhaseCTwo();
+        mirrorPhaseCTwo.setPhId(phId);
+        mirrorPhaseCTwo.setSapVer(sapVer);
 
-        return mirrorPhaseCTwoMapper.selectOne(mirrorPhaseCdc);
+        return mirrorPhaseCTwoMapper.selectOne(mirrorPhaseCTwo);
     }
 
 

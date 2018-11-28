@@ -34,8 +34,8 @@ public class AdptProjServiceImpl implements AdptProjService {
 
     @Override
     @LFAssignDataSource("custom01")
-    public void updateAdptProj(AdptProj adptProj) {
-        adptProjMapper.updateByPrimaryKey(adptProj);
+    public int updateAdptProj(AdptProj adptProj) {
+        return adptProjMapper.updateByPrimaryKey(adptProj);
     }
 
     @Override

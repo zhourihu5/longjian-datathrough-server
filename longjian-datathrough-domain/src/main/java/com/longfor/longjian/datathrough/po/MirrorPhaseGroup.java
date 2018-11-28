@@ -1,10 +1,13 @@
 package com.longfor.longjian.datathrough.po;
 
+import tk.mybatis.mapper.annotation.KeySql;
+
 import javax.persistence.*;
 
 @Table(name = "mirror_phase_group")
 public class MirrorPhaseGroup {
     @Id
+    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     /**

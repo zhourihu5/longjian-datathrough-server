@@ -274,4 +274,277 @@
     fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
     attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
   </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="db_key" jdbcType="VARCHAR" property="dbKey" />
+    <result column="channel_num" jdbcType="VARCHAR" property="channelNum" />
+    <result column="fmt_fcls" jdbcType="VARCHAR" property="fmtFcls" />
+    <result column="fmt_fcls_desc" jdbcType="VARCHAR" property="fmtFclsDesc" />
+    <result column="fmt_scls" jdbcType="VARCHAR" property="fmtScls" />
+    <result column="fmt_scls_desc" jdbcType="VARCHAR" property="fmtSclsDesc" />
+    <result column="fmt_tcls" jdbcType="VARCHAR" property="fmtTcls" />
+    <result column="fmt_tcls_desc" jdbcType="VARCHAR" property="fmtTclsDesc" />
+    <result column="fmt_attr" jdbcType="VARCHAR" property="fmtAttr" />
+    <result column="fmt_attr_desc" jdbcType="VARCHAR" property="fmtAttrDesc" />
+    <result column="attr_value" jdbcType="VARCHAR" property="attrValue" />
+    <result column="attr_value_desc" jdbcType="VARCHAR" property="attrValueDesc" />
+    <result column="fmt_comb" jdbcType="VARCHAR" property="fmtComb" />
+    <result column="fmt_comb_desc" jdbcType="VARCHAR" property="fmtCombDesc" />
+    <result column="fmt_attr_1" jdbcType="VARCHAR" property="fmtAttr1" />
+    <result column="attr_value_1" jdbcType="VARCHAR" property="attrValue1" />
+    <result column="attr_value_desc_1" jdbcType="VARCHAR" property="attrValueDesc1" />
+    <result column="fmt_attr_2" jdbcType="VARCHAR" property="fmtAttr2" />
+    <result column="attr_value_2" jdbcType="VARCHAR" property="attrValue2" />
+    <result column="attr_value_desc_2" jdbcType="VARCHAR" property="attrValueDesc2" />
+    <result column="fmt_attr_3" jdbcType="VARCHAR" property="fmtAttr3" />
+    <result column="attr_value_3" jdbcType="VARCHAR" property="attrValue3" />
+    <result column="attr_value_desc_3" jdbcType="VARCHAR" property="attrValueDesc3" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, db_key, channel_num, fmt_fcls, fmt_fcls_desc, fmt_scls, fmt_scls_desc, 
+    fmt_tcls, fmt_tcls_desc, fmt_attr, fmt_attr_desc, attr_value, attr_value_desc, fmt_comb, 
+    fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
+    attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
+  </sql>
 </mapper>

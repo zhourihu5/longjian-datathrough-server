@@ -148,4 +148,151 @@
     -->
     id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
   </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreBst">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="mandt" jdbcType="VARCHAR" property="mandt" />
+    <result column="ztree_ver" jdbcType="VARCHAR" property="ztreeVer" />
+    <result column="znode" jdbcType="VARCHAR" property="znode" />
+    <result column="nodeid" jdbcType="VARCHAR" property="nodeid" />
+    <result column="znode_name" jdbcType="VARCHAR" property="znodeName" />
+    <result column="namej" jdbcType="VARCHAR" property="namej" />
+    <result column="namee" jdbcType="VARCHAR" property="namee" />
+    <result column="zcity" jdbcType="VARCHAR" property="zcity" />
+    <result column="zcity_name" jdbcType="VARCHAR" property="zcityName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
+  </sql>
 </mapper>

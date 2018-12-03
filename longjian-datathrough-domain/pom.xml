@@ -10,7 +10,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>longjian-datathrough-domain</groupId>
     <artifactId>longjian-datathrough-domain</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -118,7 +117,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.longfor.longjian.datathrough.domain.Application</mainClass>
+                    <mainClass>com.longfor.longjian.datathrough.Application</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>

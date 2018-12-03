@@ -15,12 +15,14 @@
     <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
     <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
     <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+    <result column="banqu_flg" property="banquFlg" jdbcType="VARCHAR" />
+    <result column="swimcond" property="swimcond" jdbcType="VARCHAR" />
 
   </resultMap>
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbg.generated
     -->
-    auto_id, gr_id, his_id, his_flg, gr_name, gr_cname, de_flg, create_at, update_at,ph_id
+    auto_id, gr_id, his_id, his_flg, gr_name, gr_cname, de_flg, create_at, update_at,ph_id,banqu_flg,swimcond
   </sql>
 </mapper>

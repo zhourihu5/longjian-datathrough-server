@@ -312,6 +312,12 @@ public class MirrorPhaseCTwo  implements PhaseService {
     @Column(name = "ph_devsta")
     private String phDevsta;
 
+    @Column(name = "create_at")
+    private Date createAt;
+
+    @Column(name = "update_at")
+    private Date updateAt;
+
     /**
      * @return id
      */
@@ -1204,5 +1210,21 @@ public class MirrorPhaseCTwo  implements PhaseService {
 
     public void setHisPrId(String hisPrId) {
         this.hisPrId = hisPrId;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

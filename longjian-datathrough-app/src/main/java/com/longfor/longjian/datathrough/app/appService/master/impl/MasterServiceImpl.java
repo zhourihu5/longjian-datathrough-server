@@ -62,6 +62,21 @@ public class MasterServiceImpl implements MasterService{
     @Resource
     private AdptGroupService adptGroupService;
 
+    @Resource
+    private MirrorPhaseDOneService mirrorPhaseDOneService;
+
+    @Resource
+    private MirrorPhaseDTwoService mirrorPhaseDTwoService;
+
+    @Resource
+    private MirrorPhaseDThreeService mirrorPhaseDThreeService;
+
+    @Resource
+    private ZrreBstService zrreBstService;
+
+    @Resource
+    private ZrreTFmtAllService zrreTFmtAllService;
+
 
     /**
      * 同步项目
@@ -148,8 +163,82 @@ public class MasterServiceImpl implements MasterService{
         result.put("ItemArray", errorArray);
         executorCallBack(result.toString(),hasError);
 
+    }
+
+
+    /**
+     * 同步业态字典数据
+     * @param jsonObject
+     */
+    @Override
+    public void excuteDic(JSONObject jsonObject) {
+        log.debug(JSON.toJSONString(jsonObject));
+        JSONArray jsonArray=jsonObject.getJSONArray("ConfigArray");
+        List<ZrreTFmtAll>zrreTFmtAllList=new ArrayList<>();
+        List<ZrreBst>zrreBstList=new ArrayList<>();
+        if(jsonArray!=null && jsonArray.size()>0){
+            for(int i=0;i<jsonArray.size();i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                String tableName = object.getString("TableName");
+                JSONArray fmtArr = object.getJSONArray("JsonString");
+                if (fmtArr != null && fmtArr.size() > 0) {
+                    if ("ZRRE_T_FMT_ALL".equals(tableName)) {
+                        for (int j = 0; j < fmtArr.size(); j++) {
+                            JSONObject fmtObject = fmtArr.getJSONObject(j);
+                            ZrreTFmtAll zrreTFmtAll = new ZrreTFmtAll();
+                            zrreTFmtAll.setMandt(fmtObject.getString("MANDT"));
+                            zrreTFmtAll.setDbKey(fmtObject.getString("DB_KEY"));
+                            zrreTFmtAll.setChannelNum(fmtObject.getString("CHANNEL_NUM"));
+                            zrreTFmtAll.setFmtFcls(fmtObject.getString("FMT_FCLS"));
+                            zrreTFmtAll.setFmtFclsDesc(fmtObject.getString("FMT_FCLS_DESC"));
+                            zrreTFmtAll.setFmtScls(fmtObject.getString("FMT_SCLS"));
+                            zrreTFmtAll.setFmtSclsDesc(fmtObject.getString("FMT_SCLS_DESC"));
+                            zrreTFmtAll.setFmtTcls(fmtObject.getString("FMT_TCLS"));
+                            zrreTFmtAll.setFmtTclsDesc(fmtObject.getString("FMT_TCLS_DESC"));
+                            zrreTFmtAll.setFmtAttr(fmtObject.getString("FMT_ATTR"));
+                            zrreTFmtAll.setFmtAttrDesc(fmtObject.getString("FMT_ATTR_DESC"));
+                            zrreTFmtAll.setAttrValue(fmtObject.getString("ATTR_VALUE"));
+                            zrreTFmtAll.setAttrValueDesc(fmtObject.getString("ATTR_VALUE_DESC"));
+                            zrreTFmtAll.setFmtComb(fmtObject.getString("FMT_COMB"));
+                            zrreTFmtAll.setFmtCombDesc(fmtObject.getString("FMT_COMB_DESC"));
+                            zrreTFmtAll.setFmtAttr1(fmtObject.getString("FMT_ATTR_1"));
+                            zrreTFmtAll.setFmtAttr2(fmtObject.getString("FMT_ATTR_2"));
+                            zrreTFmtAll.setAttrValue1(fmtObject.getString("ATTR_VALUE1"));
+                            zrreTFmtAll.setAttrValueDesc1(fmtObject.getString("ATTR_VALUE_DESC1"));
+                            zrreTFmtAll.setAttrValue2(fmtObject.getString("ATTR_VALUE2"));
+                            zrreTFmtAll.setAttrValueDesc2(fmtObject.getString("ATTR_VALUE_DESC2"));
+                            zrreTFmtAll.setAttrValue3(fmtObject.getString("ATTR_VALUE3"));
+                            zrreTFmtAll.setAttrValueDesc3(fmtObject.getString("ATTR_VALUE_DESC3"));
+                            zrreTFmtAllList.add(zrreTFmtAll);
+                        }
+                    } else if ("ZRRE_BST0002".equals(tableName)) {
+                        for (int j = 0; j < fmtArr.size(); j++) {
+                            JSONObject fmtObject = fmtArr.getJSONObject(j);
+                            ZrreBst zrreBst = new ZrreBst();
+                            zrreBst.setMandt(fmtObject.getString("MANDT"));
+                            zrreBst.setNamee(fmtObject.getString("NAMEE"));
+                            zrreBst.setNamej(fmtObject.getString("NAMEJ"));
+                            zrreBst.setNodeid(fmtObject.getString("NODEID"));
+                            zrreBst.setZcity(fmtObject.getString("ZCITY"));
+                            zrreBst.setZcityName(fmtObject.getString("ZCITY_NAME"));
+                            zrreBst.setZnode(fmtObject.getString("ZNODE"));
+                            zrreBst.setZnodeName(fmtObject.getString("ZNODE_NAME"));
+                            zrreBst.setZtreeVer(fmtObject.getString("ZTREE_VER"));
+                            zrreBstList.add(zrreBst);
+                        }
+                    }
+                }
+                if (zrreTFmtAllList.size() > 0) {
+                    zrreTFmtAllService.insertList(zrreTFmtAllList);
+                }
+                if (zrreBstList.size() > 0) {
+                    zrreBstService.insertList(zrreBstList);
+                }
+            }
+        }
 
     }
+
 
     /**
      * 项目操作
@@ -231,7 +320,7 @@ public class MasterServiceImpl implements MasterService{
         if ("C1".equals(buId)) {//如果航道是C1
             MirrorPhaseCOne oldMirrorPhaseCOne = mirrorPhaseCOneService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
 
-            if ("C".equals(operCode)) { // 新增
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增或者更新  不管operCode是C还是U  只要数据库不存在同样的数据  就新增  否则就更新
                 if (oldMirrorPhaseCOne != null) {
                     num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCOne.getId(),map);//更新操作
                     result = updateResultStatus(num, stageName, result);
@@ -239,17 +328,14 @@ public class MasterServiceImpl implements MasterService{
                     num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
                     result = insertResultStatus(num, stageName, result);
                 }
-            } else if ("U".equals(operCode)) {//修改
-                num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCOne.getId(),map);//更新操作
-                result = updateResultStatus(num, stageName, result);
-            } else if ("D".equals(operCode)) {//删除
+            }else if ("D".equals(operCode)) {//删除
                 num = saveOrUpdateMirrorPhaseCOne(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCOne.getId(),map);//删除操作
                 result = deleteResultStatus(num, stageName, result);
             }
 
         }else if("C2".equals(buId)) {//如果航道是C2
             MirrorPhaseCTwo oldMirrorPhaseCTwo = mirrorPhaseCTwoService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
-            if ("C".equals(operCode)) { // 新增
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
                 if (oldMirrorPhaseCTwo != null) {
                     num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCTwo.getId(),map);//更新操作
                     result = updateResultStatus(num, stageName, result);
@@ -257,16 +343,13 @@ public class MasterServiceImpl implements MasterService{
                     num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
                     result = insertResultStatus(num, stageName, result);
                 }
-            } else if ("U".equals(operCode)) {
-                num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCTwo.getId(),map);//更新操作
-                result = updateResultStatus(num, stageName, result);
-            } else if ("D".equals(operCode)) {
+            }else if ("D".equals(operCode)) {
                 num = saveOrUpdateMirrorPhaseCTwo(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCTwo.getId(),map);//删除操作
                 result = deleteResultStatus(num, stageName, result);
             }
         }else if("C3".equals(buId)) {//如果航道是C3
             MirrorPhaseCThree oldMirrorPhaseCThree = mirrorPhaseCThreeService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
-            if ("C".equals(operCode)) { // 新增
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
                 if (oldMirrorPhaseCThree != null) {
                     num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCThree.getId(),map);//更新操作
                     result = updateResultStatus(num, stageName, result);
@@ -274,16 +357,13 @@ public class MasterServiceImpl implements MasterService{
                     num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
                     result = insertResultStatus(num, stageName, result);
                 }
-            } else if ("U".equals(operCode)) {
-                num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCThree.getId(),map);//更新操作
-                result = updateResultStatus(num, stageName, result);
-            } else if ("D".equals(operCode)) {
+            }else if ("D".equals(operCode)) {
                 num = saveOrUpdateMirrorPhaseCThree(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCThree.getId(),map);//删除操作
                 result = deleteResultStatus(num, stageName, result);
             }
         }else if("C4".equals(buId)) {//如果航道是C4
             MirrorPhaseCFour oldMirrorPhaseCFour = mirrorPhaseCFourService.findByPhIdSapVer(prId, sapVer);//判断 同一个分期 同一个版本是否推送过
-            if ("C".equals(operCode)) { // 新增
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
                 if (oldMirrorPhaseCFour != null) {
                     num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCFour.getId(),map);//更新操作
                     result = updateResultStatus(num, stageName, result);
@@ -291,11 +371,50 @@ public class MasterServiceImpl implements MasterService{
                     num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
                     result = insertResultStatus(num, stageName, result);
                 }
-            } else if ("U".equals(operCode)) {
-                num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseCFour.getId(),map);//更新操作
-                result = updateResultStatus(num, stageName, result);
-            } else if ("D".equals(operCode)) {
+            }else if ("D".equals(operCode)) {
                 num = saveOrUpdateMirrorPhaseCFour(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseCFour.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
+            }
+        }else if("D1".equals(buId)) {//如果航道是D1
+            MirrorPhaseDOne oldMirrorPhaseDOne = mirrorPhaseDOneService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
+                if (oldMirrorPhaseDOne != null) {
+                    num = saveOrUpdateMirrorPhaseDOne(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseDOne.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseDOne(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            }else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseDOne(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseDOne.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
+            }
+        }else if("D2".equals(buId)) {//如果航道是D2
+            MirrorPhaseDTwo oldMirrorPhaseDTwo = mirrorPhaseDTwoService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
+                if (oldMirrorPhaseDTwo != null) {
+                    num = saveOrUpdateMirrorPhaseDTwo(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseDTwo.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseDTwo(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            }else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseDTwo(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseDTwo.getId(),map);//删除操作
+                result = deleteResultStatus(num, stageName, result);
+            }
+        }else if("D3".equals(buId)) {//如果航道是D3
+            MirrorPhaseDThree oldMirrorPhaseDThree = mirrorPhaseDThreeService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
+            if ("C".equals(operCode)||"U".equals(operCode)) { // 新增
+                if (oldMirrorPhaseDThree != null) {
+                    num = saveOrUpdateMirrorPhaseDThree(dujson, OperationEnum.UPDATE.getType(), oldMirrorPhaseDThree.getId(),map);//更新操作
+                    result = updateResultStatus(num, stageName, result);
+                } else {
+                    num = saveOrUpdateMirrorPhaseDThree(dujson, OperationEnum.ADD.getType(), 0,map);//新增操作
+                    result = insertResultStatus(num, stageName, result);
+                }
+            }else if ("D".equals(operCode)) {
+                num = saveOrUpdateMirrorPhaseDThree(dujson, OperationEnum.DEL.getType(), oldMirrorPhaseDThree.getId(),map);//删除操作
                 result = deleteResultStatus(num, stageName, result);
             }
         }
@@ -540,6 +659,212 @@ public class MasterServiceImpl implements MasterService{
     }
 
     /**
+     * 操作D1数据
+     * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseDOne(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
+
+
+        MirrorPhaseDOne mirrorPhaseDOne=new MirrorPhaseDOne();
+        mirrorPhaseDOne.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseDOne.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseDOne.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseDOne.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseDOne.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseDOne.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseDOne.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseDOne.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseDOne.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseDOne.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseDOne.setTreePhm(dujson.getString("TREE_PHM"));
+        mirrorPhaseDOne.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseDOne.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseDOne.setHisPrId(dujson.getString("HIS_PRID"));
+        mirrorPhaseDOne.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseDOne.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseDOne.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
+
+        mirrorPhaseDOne.setHotelName(dujson.getString("HOTELNAME"));
+        mirrorPhaseDOne.setPhAsstyp(dujson.getString("PH_ASSTYP"));
+        mirrorPhaseDOne.setHotelAddress(dujson.getString("HOTELADDR"));
+        mirrorPhaseDOne.setPhOpenD(DateUtil.stampToDate(dujson.getString("PH_OPEN_D")));
+        mirrorPhaseDOne.setHotelRes(dujson.getString("HOTELRES"));
+        mirrorPhaseDOne.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseDOne.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseDOne.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseDOne.setHotelBran(dujson.getString("HOTELBRAN"));
+        mirrorPhaseDOne.setHotelStar(dujson.getString("HOTELSTAR"));
+        mirrorPhaseDOne.setPhOtypD(dujson.getString("PH_OTYP_D"));
+        mirrorPhaseDOne.setPhOtypO(dujson.getString("PH_OTYP_O"));
+        mirrorPhaseDOne.setPhEqRD(dujson.getString("PH_EQ_R_D"));
+        mirrorPhaseDOne.setPhEqRX(dujson.getString("PH_EQ_R_X"));
+        mirrorPhaseDOne.setPhEqRT(dujson.getString("PH_EQ_R_T"));
+        mirrorPhaseDOne.setPhEqRO(dujson.getString("PH_EQ_R_O"));
+        mirrorPhaseDOne.setPhEqOX(dujson.getString("PH_EQ_O_X"));
+        mirrorPhaseDOne.setPhEqOT(dujson.getString("PH_EQ_O_T"));
+
+        mirrorPhaseDOne.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseDOne.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseDOne.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseDOne.setPrBugets(dujson.getString("PR_BUGETS"));
+        mirrorPhaseDOne.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseDOne.setPrCompan(dujson.getString("PR_COMPAN"));
+
+        mirrorPhaseDOne.setPhShFlg(dujson.getString("PH_SH_FLG"));
+        mirrorPhaseDOne.setManageTyp(dujson.getString("MANAGETYP"));
+        mirrorPhaseDOne.setContStage(dujson.getString("CONTSTAGE"));
+        mirrorPhaseDOne.setHotelOcat(dujson.getString("HOTELOCAT"));
+        mirrorPhaseDOne.setPhMcFlg(dujson.getString("PH_MC_FLG"));
+        mirrorPhaseDOne.setChargFlg(dujson.getString("CHARG_FLG"));
+        mirrorPhaseDOne.setHotelScal(dujson.getString("HOTELSCAL"));
+        mirrorPhaseDOne.setHotelAyou(dujson.getString("HOTELAYOU"));
+        mirrorPhaseDOne.setConstype(dujson.getString("CONSTYPE"));
+        mirrorPhaseDOne.setPhLandcl(dujson.getString("PH_LANDCL"));
+
+        mirrorPhaseDOne.setTaxTyp(dujson.getString("TAX_TYP"));
+        int num =saveOrUpdateMirrorPhase(mirrorPhaseDOne,id,type,map);
+        return  num;
+    }
+
+    /**
+     * 操作D2数据
+     * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseDTwo(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
+
+
+        MirrorPhaseDTwo mirrorPhaseDTwo=new MirrorPhaseDTwo();
+        mirrorPhaseDTwo.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseDTwo.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseDTwo.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseDTwo.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseDTwo.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseDTwo.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseDTwo.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseDTwo.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseDTwo.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseDTwo.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseDTwo.setTreePhm(dujson.getString("TREE_PHM"));
+        mirrorPhaseDTwo.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseDTwo.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseDTwo.setHisPrId(dujson.getString("HIS_PRID"));
+        mirrorPhaseDTwo.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseDTwo.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseDTwo.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
+
+        mirrorPhaseDTwo.setPhAsstyp(dujson.getString("PH_ASSTYP"));
+        mirrorPhaseDTwo.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseDTwo.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseDTwo.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseDTwo.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseDTwo.setTaxTyp(dujson.getString("TAX_TYP"));
+        mirrorPhaseDTwo.setPhLandcl(dujson.getString("PH_LANDCL"));
+
+        mirrorPhaseDTwo.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseDTwo.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseDTwo.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseDTwo.setRevTyp(dujson.getString("REV_TYP"));
+        mirrorPhaseDTwo.setOpComName(dujson.getString("OPCOMNAME"));
+        mirrorPhaseDTwo.setPrBugets(dujson.getString("PR_BUGETS"));
+
+
+        mirrorPhaseDTwo.setPhOtypD(dujson.getString("PH_OTYP_D"));
+        mirrorPhaseDTwo.setPhOtypO(dujson.getString("PH_OTYP_O"));
+        mirrorPhaseDTwo.setPhEqRD(dujson.getString("PH_EQ_R_D"));
+        mirrorPhaseDTwo.setPhEqRX(dujson.getString("PH_EQ_R_X"));
+        mirrorPhaseDTwo.setPhEqRT(dujson.getString("PH_EQ_R_T"));
+        mirrorPhaseDTwo.setPhEqRO(dujson.getString("PH_EQ_R_O"));
+        mirrorPhaseDTwo.setPhEqOX(dujson.getString("PH_EQ_O_X"));
+        mirrorPhaseDTwo.setPhEqOT(dujson.getString("PH_EQ_O_T"));
+
+        mirrorPhaseDTwo.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseDTwo.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseDTwo.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseDTwo.setPhOpmode(dujson.getString("PH_OPMODE"));
+        mirrorPhaseDTwo.setPhPrdlin(dujson.getString("PH_PRDLIN"));
+        mirrorPhaseDTwo.setPrStage(dujson.getString("PR_STAGE"));
+        mirrorPhaseDTwo.setOpperiod(dujson.getString("OPPERIOD"));
+        mirrorPhaseDTwo.setPhDevlev(dujson.getString("PH_DEVLEV"));
+        mirrorPhaseDTwo.setPropertyp(dujson.getString("PROPERTYP"));
+
+        int num =saveOrUpdateMirrorPhase(mirrorPhaseDTwo,id,type,map);
+        return  num;
+    }
+
+    /**
+     * 操作D3数据
+     * @param dujson
+     * @param type  0是新增  1是修改 其他是删除
+     * @param id 旧数据主键
+     * @return
+     * @throws ParseException
+     */
+    private int saveOrUpdateMirrorPhaseDThree(JSONObject dujson,String type,int id,Map<String,Object>map) throws ParseException {
+
+        MirrorPhaseDThree mirrorPhaseDThree=new MirrorPhaseDThree();
+        mirrorPhaseDThree.setPhId(dujson.getString("PH_ID"));
+        mirrorPhaseDThree.setSapVer(dujson.getString("SAP_VER"));
+        mirrorPhaseDThree.setVerNam(dujson.getString("VER_NAM"));
+        mirrorPhaseDThree.setHisCode(dujson.getString("HIS_CODE"));
+        mirrorPhaseDThree.setHisIcard(dujson.getString("HIS_ICARD"));
+        mirrorPhaseDThree.setHisGuid(dujson.getString("HIS_GUID"));
+        mirrorPhaseDThree.setHisFlg(dujson.getString("HIS_FLG"));
+        mirrorPhaseDThree.setPhName(dujson.getString("PH_NAME"));
+        mirrorPhaseDThree.setApStatus(dujson.getString("AP_STATUS"));
+        mirrorPhaseDThree.setDeFlg(dujson.getString("DE_FLG"));
+        mirrorPhaseDThree.setTreePhm(dujson.getString("TREE_PHM"));
+        mirrorPhaseDThree.setPrCompan(dujson.getString("PR_COMPAN"));
+        mirrorPhaseDThree.setPrId(dujson.getString("PR_ID"));
+        mirrorPhaseDThree.setHisPrId(dujson.getString("HIS_PRID"));
+        mirrorPhaseDThree.setBuId(dujson.getString("BU_ID"));
+        mirrorPhaseDThree.setCrDate(DateUtil.stampToDate(dujson.getString("CR_DATE")));
+        mirrorPhaseDThree.setChDate(DateUtil.stampToDate(dujson.getString("CH_DATE")));
+
+        mirrorPhaseDThree.setPhAsstyp(dujson.getString("PH_ASSTYP"));
+        mirrorPhaseDThree.setCaTyp(dujson.getString("CA_TYP"));
+        mirrorPhaseDThree.setCaTypX(dujson.getString("CA_TYP_X"));
+        mirrorPhaseDThree.setCaTypT(dujson.getString("CA_TYP_T"));
+        mirrorPhaseDThree.setBugetFlg(dujson.getString("BUGET_FLG"));
+        mirrorPhaseDThree.setTaxTyp(dujson.getString("TAX_TYP"));
+        mirrorPhaseDThree.setPhLandcl(dujson.getString("PH_LANDCL"));
+
+        mirrorPhaseDThree.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseDThree.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseDThree.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseDThree.setRevTyp(dujson.getString("REV_TYP"));
+        mirrorPhaseDThree.setOpComName(dujson.getString("OPCOMNAME"));
+        mirrorPhaseDThree.setPrLoc(dujson.getString("项目区位"));
+
+        mirrorPhaseDThree.setPhOtypD(dujson.getString("PH_OTYP_D"));
+        mirrorPhaseDThree.setPhOtypO(dujson.getString("PH_OTYP_O"));
+        mirrorPhaseDThree.setPhEqRD(dujson.getString("PH_EQ_R_D"));
+        mirrorPhaseDThree.setPhEqRX(dujson.getString("PH_EQ_R_X"));
+        mirrorPhaseDThree.setPhEqRT(dujson.getString("PH_EQ_R_T"));
+        mirrorPhaseDThree.setPhEqRO(dujson.getString("PH_EQ_R_O"));
+        mirrorPhaseDThree.setPhEqOX(dujson.getString("PH_EQ_O_X"));
+        mirrorPhaseDThree.setPhEqOT(dujson.getString("PH_EQ_O_T"));
+
+        mirrorPhaseDThree.setPhPrgets(dujson.getString("PH_PRGETS"));
+        mirrorPhaseDThree.setPrGettyp(dujson.getString("PR_GETTYP"));
+        mirrorPhaseDThree.setPhMaTyp(dujson.getString("PH_MA_TYP"));
+        mirrorPhaseDThree.setPhOpmode(dujson.getString("PH_OPMODE"));
+        mirrorPhaseDThree.setPhPrdlin(dujson.getString("PH_PRDLIN"));
+        mirrorPhaseDThree.setPropeFlg(dujson.getString("PROPE_FLG"));
+        mirrorPhaseDThree.setPropertyp(dujson.getString("PROPERTYP"));
+
+        int num =saveOrUpdateMirrorPhase(mirrorPhaseDThree,id,type,map);
+        return  num;
+    }
+
+    /**
      * 操作 业务分期表
      * @param object
      * @param type
@@ -558,6 +883,8 @@ public class MasterServiceImpl implements MasterService{
             adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCOne.getHisCode(),adptProj.getLhXmcode());
             if(adptPhase==null){
                 adptPhase=new AdptPhase();
+            }else{
+                type=OperationEnum.UPDATE.getType();
             }
             adptPhase.setLhFqname(mirrorPhaseCOne.getTreePhm());
             adptPhase.setLhFqcode(mirrorPhaseCOne.getHisCode());
@@ -568,6 +895,8 @@ public class MasterServiceImpl implements MasterService{
             adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCTwo.getHisCode(),adptProj.getLhXmcode());
             if(adptPhase==null){
                 adptPhase=new AdptPhase();
+            }else{
+                type=OperationEnum.UPDATE.getType();
             }
             adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
             adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
@@ -579,6 +908,8 @@ public class MasterServiceImpl implements MasterService{
             adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCTwo.getHisCode(),adptProj.getLhXmcode());
             if(adptPhase==null){
                 adptPhase=new AdptPhase();
+            }else{
+                type=OperationEnum.UPDATE.getType();
             }
             adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
             adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
@@ -619,12 +950,15 @@ public class MasterServiceImpl implements MasterService{
             MirrorPhaseCOne mirrorPhaseCOne=(MirrorPhaseCOne) object;
 
             if(OperationEnum.ADD.getType().equals(type)){//新增
+                mirrorPhaseCOne.setCreateAt(new Date());
                 num= mirrorPhaseCOneService.insert(mirrorPhaseCOne);
             }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
                 mirrorPhaseCOne.setId(id);
+                mirrorPhaseCOne.setUpdateAt(new Date());
                 num= mirrorPhaseCOneService.update(mirrorPhaseCOne);
             }else{//删除
                 mirrorPhaseCOne.setId(id);
+                mirrorPhaseCOne.setUpdateAt(new Date());
                 num= mirrorPhaseCOneService.update(mirrorPhaseCOne);
             }
             if(num!=-1){//如果操作过程表成功  则调用业务表接口 操作业务表
@@ -634,12 +968,15 @@ public class MasterServiceImpl implements MasterService{
         if(object instanceof MirrorPhaseCTwo){
             MirrorPhaseCTwo mirrorPhaseCTwo=(MirrorPhaseCTwo) object;
             if(OperationEnum.ADD.getType().equals(type)){//新增
+                mirrorPhaseCTwo.setCreateAt(new Date());
                 num= mirrorPhaseCTwoService.insert(mirrorPhaseCTwo);
             }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
                 mirrorPhaseCTwo.setId(id);
+                mirrorPhaseCTwo.setUpdateAt(new Date());
                 num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
             }else{//删除
                 mirrorPhaseCTwo.setId(id);
+                mirrorPhaseCTwo.setUpdateAt(new Date());
                 num= mirrorPhaseCTwoService.update(mirrorPhaseCTwo);
             }
             if(num!=-1){
@@ -650,16 +987,52 @@ public class MasterServiceImpl implements MasterService{
         if(object instanceof MirrorPhaseCThree){
             MirrorPhaseCThree mirrorPhaseCThree=(MirrorPhaseCThree) object;
             if(OperationEnum.ADD.getType().equals(type)){//新增
+                mirrorPhaseCThree.setUpdateAt(new Date());
                 num= mirrorPhaseCThreeService.insert(mirrorPhaseCThree);
             }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
                 mirrorPhaseCThree.setId(id);
+                mirrorPhaseCThree.setUpdateAt(new Date());
                 num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
             }else{//删除
                 mirrorPhaseCThree.setId(id);
+                mirrorPhaseCThree.setUpdateAt(new Date());
                 num= mirrorPhaseCThreeService.update(mirrorPhaseCThree);
             }
             if(num!=-1){
                 num= saveOrUpdateAdptPhase(mirrorPhaseCThree,type,map);
+            }
+        }if(object instanceof MirrorPhaseDOne){
+            MirrorPhaseDOne mirrorPhaseDOne=(MirrorPhaseDOne) object;
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseDOneService.insert(mirrorPhaseDOne);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseDOne.setId(id);
+                num= mirrorPhaseDOneService.update(mirrorPhaseDOne);
+            }else{//删除
+                mirrorPhaseDOne.setId(id);
+                num= mirrorPhaseDOneService.update(mirrorPhaseDOne);
+            }
+        }if(object instanceof MirrorPhaseDTwo){
+            MirrorPhaseDTwo mirrorPhaseDTwo=(MirrorPhaseDTwo) object;
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseDTwoService.insert(mirrorPhaseDTwo);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseDTwo.setId(id);
+                num= mirrorPhaseDTwoService.update(mirrorPhaseDTwo);
+            }else{//删除
+                mirrorPhaseDTwo.setId(id);
+                num= mirrorPhaseDTwoService.update(mirrorPhaseDTwo);
+            }
+        }if(object instanceof MirrorPhaseDThree){
+            MirrorPhaseDThree mirrorPhaseDThree=(MirrorPhaseDThree) object;
+            if(OperationEnum.ADD.getType().equals(type)){//新增
+                num= mirrorPhaseDThreeService.insert(mirrorPhaseDThree);
+            }else if(OperationEnum.UPDATE.getType().equals(type)) {//修改
+                mirrorPhaseDThree.setId(id);
+                num= mirrorPhaseDThreeService.update(mirrorPhaseDThree);
+            }else{//删除
+                mirrorPhaseDThree.setId(id);
+                num= mirrorPhaseDThreeService.update(mirrorPhaseDThree);
             }
         }
         return  num;
@@ -678,7 +1051,6 @@ public class MasterServiceImpl implements MasterService{
 
         for(int i=0;i<jsonArray.size();i++){
             JSONObject jsonObject=jsonArray.getJSONObject(i);
-
             AdptGroup adptGroup=new AdptGroup();
             adptGroup.setPhId(phId);
             adptGroup.setDeFlg(jsonObject.getString("DE_FLG"));
@@ -687,6 +1059,8 @@ public class MasterServiceImpl implements MasterService{
             adptGroup.setHisFlg(jsonObject.getString("HIS_FLG"));
             adptGroup.setHisId(jsonObject.getString("HIS_ID"));
             adptGroup.setGrName(jsonObject.getString("GR_NAME"));
+            adptGroup.setBanquFlg(jsonObject.getString("BANQU_FLG"));
+            adptGroup.setSwimcond(jsonObject.getString("SWIMCOND"));
             adptGroup.setCreateAt(new Date());
             adptGroup.setUpdateAt(new Date());
             adptGroupList.add(adptGroup);

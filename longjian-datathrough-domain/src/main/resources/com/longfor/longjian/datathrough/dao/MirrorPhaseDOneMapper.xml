@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.MirrorPhaseDOneMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.MirrorPhaseDOne" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+    <result column="sap_ver" property="sapVer" jdbcType="VARCHAR" />
+    <result column="ver_nam" property="verNam" jdbcType="VARCHAR" />
+    <result column="his_code" property="hisCode" jdbcType="VARCHAR" />
+    <result column="his_icard" property="hisIcard" jdbcType="VARCHAR" />
+    <result column="his_guid" property="hisGuid" jdbcType="VARCHAR" />
+    <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
+    <result column="ph_name" property="phName" jdbcType="VARCHAR" />
+    <result column="tree_phm" property="treePhm" jdbcType="VARCHAR" />
+    <result column="ap_status" property="apStatus" jdbcType="VARCHAR" />
+    <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
+    <result column="pr_id" property="prId" jdbcType="VARCHAR" />
+    <result column="his_pr_id" property="hisPrId" jdbcType="VARCHAR" />
+    <result column="bu_id" property="buId" jdbcType="VARCHAR" />
+    <result column="cr_date" property="crDate" jdbcType="TIMESTAMP" />
+    <result column="ch_date" property="chDate" jdbcType="TIMESTAMP" />
+    <result column="hotel_name" property="hotelName" jdbcType="VARCHAR" />
+    <result column="ph_asstyp" property="phAsstyp" jdbcType="VARCHAR" />
+    <result column="hotel_address" property="hotelAddress" jdbcType="VARCHAR" />
+    <result column="ph_open_d" property="phOpenD" jdbcType="TIMESTAMP" />
+    <result column="hotel_res" property="hotelRes" jdbcType="VARCHAR" />
+    <result column="ph_prgets" property="phPrgets" jdbcType="VARCHAR" />
+    <result column="pr_gettyp" property="prGettyp" jdbcType="VARCHAR" />
+    <result column="ph_ma_typ" property="phMaTyp" jdbcType="VARCHAR" />
+    <result column="hotel_bran" property="hotelBran" jdbcType="VARCHAR" />
+    <result column="hotel_star" property="hotelStar" jdbcType="VARCHAR" />
+    <result column="ph_otyp_d" property="phOtypD" jdbcType="VARCHAR" />
+    <result column="ph_otyp_o" property="phOtypO" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_d" property="phEqRD" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_x" property="phEqRX" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_t" property="phEqRT" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_o" property="phEqRO" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_x" property="phEqOX" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_t" property="phEqOT" jdbcType="VARCHAR" />
+    <result column="ca_typ" property="caTyp" jdbcType="VARCHAR" />
+    <result column="ca_typ_x" property="caTypX" jdbcType="VARCHAR" />
+    <result column="ca_typ_t" property="caTypT" jdbcType="VARCHAR" />
+    <result column="pr_compan" property="prCompan" jdbcType="VARCHAR" />
+    <result column="tax_typ" property="taxTyp" jdbcType="VARCHAR" />
+    <result column="buget_flg" property="bugetFlg" jdbcType="VARCHAR" />
+    <result column="pr_bugets" property="prBugets" jdbcType="VARCHAR" />
+    <result column="ph_sh_flg" property="phShFlg" jdbcType="VARCHAR" />
+    <result column="manage_typ" property="manageTyp" jdbcType="VARCHAR" />
+    <result column="cont_stage" property="contStage" jdbcType="VARCHAR" />
+    <result column="hotel_ocat" property="hotelOcat" jdbcType="VARCHAR" />
+    <result column="ph_mc_flg" property="phMcFlg" jdbcType="VARCHAR" />
+    <result column="charg_flg" property="chargFlg" jdbcType="VARCHAR" />
+    <result column="park_flg" property="parkFlg" jdbcType="VARCHAR" />
+    <result column="hotel_scal" property="hotelScal" jdbcType="VARCHAR" />
+    <result column="hotel_ayou" property="hotelAyou" jdbcType="VARCHAR" />
+    <result column="constype" property="constype" jdbcType="VARCHAR" />
+    <result column="ph_landcl" property="phLandcl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name, tree_phm, 
+    ap_status, de_flg, pr_id, his_pr_id, bu_id, cr_date, ch_date, hotel_name, ph_asstyp, 
+    hotel_address, ph_open_d, hotel_res, ph_prgets, pr_gettyp, ph_ma_typ, hotel_bran, 
+    hotel_star, ph_otyp_d, ph_otyp_o, ph_eq_r_d, ph_eq_r_x, ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, 
+    ph_eq_o_t, ca_typ, ca_typ_x, ca_typ_t, pr_compan, tax_typ, buget_flg, pr_bugets, 
+    ph_sh_flg, manage_typ, cont_stage, hotel_ocat, ph_mc_flg, charg_flg, park_flg, hotel_scal, 
+    hotel_ayou, constype, ph_landcl
+  </sql>
+</mapper>

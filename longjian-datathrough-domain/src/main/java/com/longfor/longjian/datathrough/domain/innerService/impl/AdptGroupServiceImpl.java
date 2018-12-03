@@ -1,5 +1,6 @@
 package com.longfor.longjian.datathrough.domain.innerService.impl;
 
+import com.longfor.gaia.gfs.data.mybatis.datasource.LFAssignDataSource;
 import com.longfor.longjian.datathrough.dao.AdptGroupMapper;
 import com.longfor.longjian.datathrough.domain.innerService.AdptGroupService;
 import com.longfor.longjian.datathrough.po.AdptGroup;
@@ -25,6 +26,7 @@ public class AdptGroupServiceImpl implements AdptGroupService {
      * @return
      */
     @Override
+    @LFAssignDataSource("custom01")
     public int insertList(List<AdptGroup> adptGroupList) {
         return adptGroupMapper.insertList(adptGroupList);
     }
@@ -35,6 +37,7 @@ public class AdptGroupServiceImpl implements AdptGroupService {
      * @return
      */
     @Override
+    @LFAssignDataSource("custom01")
     public int delByPhId(String phId) {
         AdptGroup adptGroup=new AdptGroup();
         adptGroup.setPhId(phId);

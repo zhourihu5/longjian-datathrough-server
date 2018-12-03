@@ -56,7 +56,24 @@
     <result column="ph_opid" property="phOpid" jdbcType="VARCHAR" />
     <result column="constype" property="constype" jdbcType="VARCHAR" />
     <result column="ph_sh_flg" property="phShFlg" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <resultMap id="ConResultMap" type="com.longfor.longjian.datathrough.po.StageConResult">
+    <result column="gsId" property="gsId" jdbcType="VARCHAR" />
+    <result column="gsCode" property="gsCode" jdbcType="VARCHAR" />
+    <result column="gsName" property="gsName" jdbcType="VARCHAR" />
+    <result column="xmId" property="xmId" jdbcType="VARCHAR" />
+    <result column="xmCode" property="xmCode" jdbcType="VARCHAR" />
+    <result column="xmName" property="xmName" jdbcType="VARCHAR" />
+    <result column="fqId" property="fqId" jdbcType="VARCHAR" />
+    <result column="fqName" property="fqName" jdbcType="VARCHAR" />
+    <result column="fqCode" property="fqCode" jdbcType="VARCHAR" />
+    <result column="fqCardId" property="fqCardId" jdbcType="VARCHAR" />
+    <result column="ptype" property="ptype" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbg.generated
@@ -66,6 +83,26 @@
     ca_typ_t, ph_otyp_d, ph_otyp_o, ph_eq_r_d, ph_eq_r_x, ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, his_pr_id,
     ph_eq_o_t, ph_prdlin, ph_landcl, tax_typ, buget_flg, ph_asstyp, pr_gettyp, ph_ma_typ, 
     ph_prgets, ph_open_d, pr_bugets, ph_rnlev, ph_flplan, ph_leaper, ph_ren_sd, ph_ren_ed, 
-    ph_shpadr, ph_opname, ph_opid, constype, ph_sh_flg
+    ph_shpadr, ph_opname, ph_opid, constype, ph_sh_flg,create_at,update_at
   </sql>
+
+  <select id="getStageThreeByUpdateTime" resultMap="ConResultMap">
+    SELECT
+    '' as gsId,
+    zb.znode as gsCode,
+    zb.znode_name as gsName,
+    '' as xmId,
+    ap.lh_xmcode as xmCode,
+    ap.lh_xmname as xmName,
+    t.his_guid as fqId,
+    t.tree_phm as fqName,
+    t.his_code as fqCode,
+    t.his_icard as fqCardId,
+    '3' as ptype
+    FROM
+    `mirror_phase_c_three` t
+    LEFT JOIN adpt_proj ap ON t.his_pr_id = ap.lh_xmcode
+    LEFT JOIN zrre_bst zb ON ap.lh_gscode = zb.znode
+    where <![CDATA[ t.update_at >= #{updateAt}]]>
+  </select>
 </mapper>

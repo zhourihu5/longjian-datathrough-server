@@ -28,11 +28,14 @@ longfor:
       clients:
         murphy:
           login-murphy-one:
-            url: http://192.168.37.71:51004/web/
+            url: http://192.168.37.71:51004/web/ #墨菲接口地址
         config:
           login-murphy-one:
             connectTimeout: 5000 # default 10 * 1000
             readTimeout: 5000 # default 60 * 1000
+        galactic:
+          push-stage:
+            url: http://10.238.63.150:51001/receive/ #文档接收分期接口
 
   data:
     pagehelper:
@@ -133,12 +136,3 @@ longjian:
   domain: testlongjianapp.longhu.net
   login:
     cookie: zjsess #cookie名称
-
-
-
-
-
-
-
-
-

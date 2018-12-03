@@ -4,10 +4,12 @@ import com.longfor.gaia.gfs.data.mybatis.datasource.LFAssignDataSource;
 import com.longfor.longjian.datathrough.dao.MirrorPhaseCThreeMapper;
 import com.longfor.longjian.datathrough.domain.innerService.MirrorPhaseCThreeService;
 import com.longfor.longjian.datathrough.po.MirrorPhaseCThree;
+import com.longfor.longjian.datathrough.po.StageConResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by Wang on 2018/11/18.
@@ -55,6 +57,12 @@ public class MirrorPhaseCThreeServiceImpl implements MirrorPhaseCThreeService {
         mirrorPhaseCThree.setSapVer(sapVer);
 
         return mirrorPhaseCThreeMapper.selectOne(mirrorPhaseCThree);
+    }
+
+    @Override
+    @LFAssignDataSource("custom01")
+    public List<StageConResult> getStageThreeByUpdateTime(String updateAt) {
+        return mirrorPhaseCThreeMapper.getStageThreeByUpdateTime(updateAt);
     }
 
 

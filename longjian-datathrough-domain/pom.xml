@@ -10,6 +10,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <groupId>longjian-datathrough-domain</groupId>
     <artifactId>longjian-datathrough-domain</artifactId>
     <version>1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>

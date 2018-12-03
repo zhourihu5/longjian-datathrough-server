@@ -4,10 +4,12 @@ import com.longfor.gaia.gfs.data.mybatis.datasource.LFAssignDataSource;
 import com.longfor.longjian.datathrough.dao.MirrorPhaseCOneMapper;
 import com.longfor.longjian.datathrough.domain.innerService.MirrorPhaseCOneService;
 import com.longfor.longjian.datathrough.po.MirrorPhaseCOne;
+import com.longfor.longjian.datathrough.po.StageConResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by Wang on 2018/11/18.
@@ -56,6 +58,17 @@ public class MirrorPhaseCOneServiceImpl implements MirrorPhaseCOneService {
         mirrorPhaseCOne.setSapVer(sapVer);
 
         return mirrorPhaseCOneMapper.selectOne(mirrorPhaseCOne);
+    }
+
+    /**
+     * 获取推送给分期的数据
+     * @param updateAt
+     * @return
+     */
+    @Override
+    @LFAssignDataSource("custom01")
+    public List<StageConResult> getStageOneByUpdateTime(String updateAt) {
+        return mirrorPhaseCOneMapper.getStageOneByUpdateTime(updateAt);
     }
 
 

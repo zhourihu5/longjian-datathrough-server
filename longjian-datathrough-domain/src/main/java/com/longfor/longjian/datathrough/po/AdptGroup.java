@@ -46,6 +46,18 @@ public class AdptGroup {
     private String deFlg;
 
     /**
+     * 是否含宴会厅
+     */
+    @Column(name="banqu_flg")
+    private String banquFlg;
+
+    /**
+     * 游泳池情况
+     */
+    @Column(name="swimcond")
+    private String swimcond;
+
+    /**
      * 分期身份证
      */
     @Column(name="ph_id")
@@ -213,5 +225,21 @@ public class AdptGroup {
 
     public void setPhId(String phId) {
         this.phId = phId;
+    }
+
+    public String getBanquFlg() {
+        return banquFlg;
+    }
+
+    public void setBanquFlg(String banquFlg) {
+        this.banquFlg = banquFlg;
+    }
+
+    public String getSwimcond() {
+        return swimcond;
+    }
+
+    public void setSwimcond(String swimcond) {
+        this.swimcond = swimcond;
     }
 }

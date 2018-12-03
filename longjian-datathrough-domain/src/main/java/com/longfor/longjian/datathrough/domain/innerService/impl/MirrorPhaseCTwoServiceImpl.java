@@ -4,10 +4,13 @@ import com.longfor.gaia.gfs.data.mybatis.datasource.LFAssignDataSource;
 import com.longfor.longjian.datathrough.dao.MirrorPhaseCTwoMapper;
 import com.longfor.longjian.datathrough.domain.innerService.MirrorPhaseCTwoService;
 import com.longfor.longjian.datathrough.po.MirrorPhaseCTwo;
+import com.longfor.longjian.datathrough.po.StageConResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Created by Wang on 2018/11/18.
@@ -55,6 +58,17 @@ public class MirrorPhaseCTwoServiceImpl implements MirrorPhaseCTwoService {
         mirrorPhaseCTwo.setSapVer(sapVer);
 
         return mirrorPhaseCTwoMapper.selectOne(mirrorPhaseCTwo);
+    }
+
+    /**
+     * 获取推送给文档的分期数据
+     * @param updateAt
+     * @return
+     */
+    @Override
+    @LFAssignDataSource("custom01")
+    public List<StageConResult> getStageTwoByUpdateTime(String updateAt) {
+        return mirrorPhaseCTwoMapper.getStageTwoByUpdateTime(updateAt);
     }
 
 

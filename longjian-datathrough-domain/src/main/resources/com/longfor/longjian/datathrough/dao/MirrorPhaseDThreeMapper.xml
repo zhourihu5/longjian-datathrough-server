@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.longfor.longjian.datathrough.dao.MirrorPhaseDThreeMapper" >
+  <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.MirrorPhaseDThree" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="ph_id" property="phId" jdbcType="VARCHAR" />
+    <result column="sap_ver" property="sapVer" jdbcType="VARCHAR" />
+    <result column="ver_nam" property="verNam" jdbcType="VARCHAR" />
+    <result column="his_code" property="hisCode" jdbcType="VARCHAR" />
+    <result column="his_icard" property="hisIcard" jdbcType="VARCHAR" />
+    <result column="his_guid" property="hisGuid" jdbcType="VARCHAR" />
+    <result column="his_flg" property="hisFlg" jdbcType="VARCHAR" />
+    <result column="ph_name" property="phName" jdbcType="VARCHAR" />
+    <result column="tree_phm" property="treePhm" jdbcType="VARCHAR" />
+    <result column="ap_status" property="apStatus" jdbcType="VARCHAR" />
+    <result column="de_flg" property="deFlg" jdbcType="VARCHAR" />
+    <result column="pr_id" property="prId" jdbcType="VARCHAR" />
+    <result column="his_pr_id" property="hisPrId" jdbcType="VARCHAR" />
+    <result column="bu_id" property="buId" jdbcType="VARCHAR" />
+    <result column="cr_date" property="crDate" jdbcType="TIMESTAMP" />
+    <result column="ch_date" property="chDate" jdbcType="TIMESTAMP" />
+    <result column="ph_cname" property="phCname" jdbcType="VARCHAR" />
+    <result column="ph_asstyp" property="phAsstyp" jdbcType="VARCHAR" />
+    <result column="pr_compan" property="prCompan" jdbcType="VARCHAR" />
+    <result column="ph_prgets" property="phPrgets" jdbcType="VARCHAR" />
+    <result column="pr_gettyp" property="prGettyp" jdbcType="VARCHAR" />
+    <result column="ph_ma_typ" property="phMaTyp" jdbcType="VARCHAR" />
+    <result column="ph_opmode" property="phOpmode" jdbcType="VARCHAR" />
+    <result column="ph_prdlin" property="phPrdlin" jdbcType="VARCHAR" />
+    <result column="ph_otyp_d" property="phOtypD" jdbcType="VARCHAR" />
+    <result column="ph_otyp_o" property="phOtypO" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_d" property="phEqRD" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_x" property="phEqRX" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_t" property="phEqRT" jdbcType="VARCHAR" />
+    <result column="ph_eq_r_o" property="phEqRO" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_x" property="phEqOX" jdbcType="VARCHAR" />
+    <result column="ph_eq_o_t" property="phEqOT" jdbcType="VARCHAR" />
+    <result column="ca_typ" property="caTyp" jdbcType="VARCHAR" />
+    <result column="ca_typ_x" property="caTypX" jdbcType="VARCHAR" />
+    <result column="ca_typ_t" property="caTypT" jdbcType="VARCHAR" />
+    <result column="ph_landcl" property="phLandcl" jdbcType="VARCHAR" />
+    <result column="tax_typ" property="taxTyp" jdbcType="VARCHAR" />
+    <result column="buget_flg" property="bugetFlg" jdbcType="VARCHAR" />
+    <result column="rev_typ" property="revTyp" jdbcType="VARCHAR" />
+    <result column="pr_loc" property="prLoc" jdbcType="VARCHAR" />
+    <result column="propertyp" property="propertyp" jdbcType="VARCHAR" />
+    <result column="op_com_name" property="opComName" jdbcType="VARCHAR" />
+    <result column="prope_flg" property="propeFlg" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    <!--
+      WARNING - @mbg.generated
+    -->
+    id, ph_id, sap_ver, ver_nam, his_code, his_icard, his_guid, his_flg, ph_name, tree_phm, 
+    ap_status, de_flg, pr_id, his_pr_id, bu_id, cr_date, ch_date, ph_cname, ph_asstyp, 
+    pr_compan, ph_prgets, pr_gettyp, ph_ma_typ, ph_opmode, ph_prdlin, ph_otyp_d, ph_otyp_o, 
+    ph_eq_r_d, ph_eq_r_x, ph_eq_r_t, ph_eq_r_o, ph_eq_o_x, ph_eq_o_t, ca_typ, ca_typ_x, 
+    ca_typ_t, ph_landcl, tax_typ, buget_flg, rev_typ, pr_loc, propertyp, op_com_name, 
+    prope_flg
+  </sql>
+</mapper>

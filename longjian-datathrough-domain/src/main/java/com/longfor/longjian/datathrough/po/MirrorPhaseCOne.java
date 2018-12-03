@@ -247,6 +247,12 @@ public class MirrorPhaseCOne implements PhaseService {
     @Column(name = "tax_typ")
     private String taxTyp;
 
+    @Column(name = "create_at")
+    private Date createAt;
+
+    @Column(name = "update_at")
+    private Date updateAt;
+
     /**
      * @return id
      */
@@ -941,5 +947,21 @@ public class MirrorPhaseCOne implements PhaseService {
 
     public void setTreePhm(String treePhm) {
         this.treePhm = treePhm;
+    }
+
+    public Date getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(Date createAt) {
+        this.createAt = createAt;
+    }
+
+    public Date getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(Date updateAt) {
+        this.updateAt = updateAt;
     }
 }

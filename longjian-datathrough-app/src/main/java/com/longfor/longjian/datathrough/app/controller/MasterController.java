@@ -41,4 +41,18 @@ public class MasterController {
         masterService.excuteStage(jsonObject);
         return new LjBaseResponse();
     }
+
+    /**
+     * 主数据 接收业态  地区公司字典信息
+     * @param jsonObject
+     * @return
+     */
+    @RequestMapping(value = "excuteDic",method = RequestMethod.POST)
+    public LjBaseResponse excuteDic(@RequestBody JSONObject jsonObject){
+        masterService.excuteDic(jsonObject);
+        return new LjBaseResponse();
+    }
+
+
+
 }

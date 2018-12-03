@@ -45,7 +45,24 @@
     <result column="hardc_set" property="hardcSet" jdbcType="VARCHAR" />
     <result column="lands_set" property="landsSet" jdbcType="VARCHAR" />
     <result column="tax_typ" property="taxTyp" jdbcType="VARCHAR" />
+    <result column="create_at" property="createAt" jdbcType="TIMESTAMP" />
+    <result column="update_at" property="updateAt" jdbcType="TIMESTAMP" />
   </resultMap>
+
+  <resultMap id="ConResultMap" type="com.longfor.longjian.datathrough.po.StageConResult">
+    <result column="gsId" property="gsId" jdbcType="VARCHAR" />
+    <result column="gsCode" property="gsCode" jdbcType="VARCHAR" />
+    <result column="gsName" property="gsName" jdbcType="VARCHAR" />
+    <result column="xmId" property="xmId" jdbcType="VARCHAR" />
+    <result column="xmCode" property="xmCode" jdbcType="VARCHAR" />
+    <result column="xmName" property="xmName" jdbcType="VARCHAR" />
+    <result column="fqId" property="fqId" jdbcType="VARCHAR" />
+    <result column="fqName" property="fqName" jdbcType="VARCHAR" />
+    <result column="fqCode" property="fqCode" jdbcType="VARCHAR" />
+    <result column="fqCardId" property="fqCardId" jdbcType="VARCHAR" />
+    <result column="ptype" property="ptype" jdbcType="VARCHAR" />
+  </resultMap>
+
   <sql id="Base_Column_List" >
     <!--
       WARNING - @mbg.generated
@@ -54,6 +71,27 @@
     de_flg, ph_cname, pr_compan, bu_id, ph_prdlev, ph_devlev, cr_date, ch_date, pr_id, his_pr_id,
     ph_optyp, ph_equi_r, ph_equi_x, ph_equi_t, ca_typ, ca_typ_x, ca_typ_t, pr_bugets, 
     ph_prgets, pr_gettyp, ph_ma_typ, buget_flg, ph_od_flg, ph_delive, ph_landcl, arch_set, 
-    hardc_set, lands_set, tax_typ
+    hardc_set, lands_set, tax_typ,create_at,update_at
   </sql>
+
+  <select id="getStageOneByUpdateTime" resultMap="ConResultMap">
+    SELECT
+      '' as gsId,
+      zb.znode as gsCode,
+        zb.znode_name as gsName,
+      '' as xmId,
+        ap.lh_xmcode as xmCode,
+      ap.lh_xmname as xmName,
+      t.his_guid as fqId,
+      t.tree_phm as fqName,
+        t.his_code as fqCode,
+      t.his_icard as fqCardId,
+      '1' as ptype
+    FROM
+        `mirror_phase_c_one` t
+    LEFT JOIN adpt_proj ap ON t.his_pr_id = ap.lh_xmcode
+    LEFT JOIN zrre_bst zb ON ap.lh_gscode = zb.znode
+    where <![CDATA[ t.update_at >= #{updateAt}]]>
+  </select>
+
 </mapper>

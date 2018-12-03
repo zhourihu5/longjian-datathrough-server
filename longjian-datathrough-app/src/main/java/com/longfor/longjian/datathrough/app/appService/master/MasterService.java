@@ -9,10 +9,9 @@ public interface MasterService {
 
     void excuteProject(JSONObject jsonObject);
 
-
     void excuteStage(JSONObject jsonObject);
 
-
+    void  excuteDic(JSONObject jsonObject);
 
 
 }

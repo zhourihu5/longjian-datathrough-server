@@ -1,15 +1,11 @@
 package com.longfor.longjian.datathrough.po;
 
-import com.longfor.longjian.datathrough.domain.innerService.PhaseService;
-import tk.mybatis.mapper.annotation.KeySql;
-
 import java.util.Date;
 import javax.persistence.*;
 
-@Table(name = "mirror_phase_c_three")
-public class MirrorPhaseCThree implements PhaseService {
+@Table(name = "mirror_phase_d_one")
+public class MirrorPhaseDOne {
     @Id
-    @KeySql(useGeneratedKeys = true)
     private Integer id;
 
     /**
@@ -63,7 +59,7 @@ public class MirrorPhaseCThree implements PhaseService {
     /**
      * 主数据分期名称
      */
-    @Column(name="tree_phm")
+    @Column(name = "tree_phm")
     private String treePhm;
 
     /**
@@ -79,16 +75,13 @@ public class MirrorPhaseCThree implements PhaseService {
     private String deFlg;
 
     /**
-     * 项目类型
+     * 项目身份证
      */
-    @Column(name = "pr_type")
-    private String prType;
+    @Column(name = "pr_id")
+    private String prId;
 
-    /**
-     * 项目公司
-     */
-    @Column(name = "pr_compan")
-    private String prCompan;
+    @Column(name = "his_pr_id")
+    private String hisPrId;
 
     /**
      * 航道编码
@@ -109,40 +102,64 @@ public class MirrorPhaseCThree implements PhaseService {
     private Date chDate;
 
     /**
-     * 项目身份证
+     * 酒店名称
      */
-    @Column(name = "pr_id")
-    private String prId;
+    @Column(name = "hotel_name")
+    private String hotelName;
 
     /**
-     * 历史项目code
+     * 资产类型
      */
-    @Column(name="his_pr_id")
-    private String hisPrId;
+    @Column(name = "ph_asstyp")
+    private String phAsstyp;
 
     /**
-     * 操盘类型
+     * 酒店地址
      */
-    @Column(name = "ph_optyp")
-    private String phOptyp;
+    @Column(name = "hotel_address")
+    private String hotelAddress;
 
     /**
-     * 当前并表类型
+     * 开业日期
      */
-    @Column(name = "ca_typ")
-    private String caTyp;
+    @Column(name = "ph_open_d")
+    private Date phOpenD;
 
     /**
-     * 预估并表类型
+     * 酒店管理方
      */
-    @Column(name = "ca_typ_x")
-    private String caTypX;
+    @Column(name = "hotel_res")
+    private String hotelRes;
 
     /**
-     * 预估状态达成时间（并表类型）
+     * 项目获取时的状态
      */
-    @Column(name = "ca_typ_t")
-    private String caTypT;
+    @Column(name = "ph_prgets")
+    private String phPrgets;
+
+    /**
+     * 项目获取方式
+     */
+    @Column(name = "pr_gettyp")
+    private String prGettyp;
+
+    /**
+     * 收并购类型
+     */
+    @Column(name = "ph_ma_typ")
+    private String phMaTyp;
+
+    /**
+     * 酒店品牌
+     */
+    @Column(name = "hotel_bran")
+    private String hotelBran;
+
+    /**
+     * 酒店档次
+     */
+    @Column(name = "hotel_star")
+    private String hotelStar;
 
     /**
      * 操盘类型（开发阶段）
@@ -193,16 +210,28 @@ public class MirrorPhaseCThree implements PhaseService {
     private String phEqOT;
 
     /**
-     * 产品线
+     * 当前并表类型
      */
-    @Column(name = "ph_prdlin")
-    private String phPrdlin;
+    @Column(name = "ca_typ")
+    private String caTyp;
 
     /**
-     * 客研土地分类
+     * 预估并表类型
      */
-    @Column(name = "ph_landcl")
-    private String phLandcl;
+    @Column(name = "ca_typ_x")
+    private String caTypX;
+
+    /**
+     * 预估状态达成时间（并表类型）
+     */
+    @Column(name = "ca_typ_t")
+    private String caTypT;
+
+    /**
+     * 项目公司
+     */
+    @Column(name = "pr_compan")
+    private String prCompan;
 
     /**
      * 计税方式
@@ -217,93 +246,10 @@ public class MirrorPhaseCThree implements PhaseService {
     private String bugetFlg;
 
     /**
-     * 资产类型
-     */
-    @Column(name = "ph_asstyp")
-    private String phAsstyp;
-
-    /**
-     * 项目获取方式
-     */
-    @Column(name = "pr_gettyp")
-    private String prGettyp;
-
-    /**
-     * 收并购类型
-     */
-    @Column(name = "ph_ma_typ")
-    private String phMaTyp;
-
-    /**
-     * 项目获取时的状态
-     */
-    @Column(name = "ph_prgets")
-    private String phPrgets;
-
-    /**
-     * 开业日期
-     */
-    @Column(name = "ph_open_d")
-    private Date phOpenD;
-
-    /**
      * 项目预算状态
      */
     @Column(name = "pr_bugets")
     private String prBugets;
-
-    /**
-     * 改造成本分级
-     */
-    @Column(name = "ph_rnlev")
-    private String phRnlev;
-
-    /**
-     * 房型
-     */
-    @Column(name = "ph_flplan")
-    private String phFlplan;
-
-    /**
-     * 承租合同租赁年限（年）
-     */
-    @Column(name = "ph_leaper")
-    private Integer phLeaper;
-
-    /**
-     * 承租合同租赁起始日期 （含免租期）
-     */
-    @Column(name = "ph_ren_sd")
-    private Date phRenSd;
-
-    /**
-     * 承租合同租赁截止日期
-     */
-    @Column(name = "ph_ren_ed")
-    private Date phRenEd;
-
-    /**
-     * 门店地址
-     */
-    @Column(name = "ph_shpadr")
-    private String phShpadr;
-
-    /**
-     * 商机名称
-     */
-    @Column(name = "ph_opname")
-    private String phOpname;
-
-    /**
-     * 商机编码
-     */
-    @Column(name = "ph_opid")
-    private String phOpid;
-
-    /**
-     * 建造类别
-     */
-    private String constype;
 
     /**
      * 是否售转持
@@ -311,11 +257,64 @@ public class MirrorPhaseCThree implements PhaseService {
     @Column(name = "ph_sh_flg")
     private String phShFlg;
 
-    @Column(name = "create_at")
-    private Date createAt;
+    /**
+     * 运营阶段管理类型
+     */
+    @Column(name = "manage_typ")
+    private String manageTyp;
 
-    @Column(name = "update_at")
-    private Date updateAt;
+    /**
+     * 合同阶段
+     */
+    @Column(name = "cont_stage")
+    private String contStage;
+
+    /**
+     * 酒店区位
+     */
+    @Column(name = "hotel_ocat")
+    private String hotelOcat;
+
+    /**
+     * 是否地铁上盖
+     */
+    @Column(name = "ph_mc_flg")
+    private String phMcFlg;
+
+    /**
+     * 是否设充电桩
+     */
+    @Column(name = "charg_flg")
+    private String chargFlg;
+
+    /**
+     * 是否设机械车位
+     */
+    @Column(name = "park_flg")
+    private String parkFlg;
+
+    /**
+     * 酒店规模
+     */
+    @Column(name = "hotel_scal")
+    private String hotelScal;
+
+    /**
+     * 总图布局
+     */
+    @Column(name = "hotel_ayou")
+    private String hotelAyou;
+
+    /**
+     * 建造类别
+     */
+    private String constype;
+
+    /**
+     * 客研土地分类
+     */
+    @Column(name = "ph_landcl")
+    private String phLandcl;
 
     /**
      * @return id
@@ -476,6 +475,24 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
+     * 获取主数据分期名称
+     *
+     * @return tree_phm - 主数据分期名称
+     */
+    public String getTreePhm() {
+        return treePhm;
+    }
+
+    /**
+     * 设置主数据分期名称
+     *
+     * @param treePhm 主数据分期名称
+     */
+    public void setTreePhm(String treePhm) {
+        this.treePhm = treePhm == null ? null : treePhm.trim();
+    }
+
+    /**
      * 获取审批状态
      *
      * @return ap_status - 审批状态
@@ -512,39 +529,35 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取项目类型
+     * 获取项目身份证
      *
-     * @return pr_type - 项目类型
+     * @return pr_id - 项目身份证
      */
-    public String getPrType() {
-        return prType;
+    public String getPrId() {
+        return prId;
     }
 
     /**
-     * 设置项目类型
+     * 设置项目身份证
      *
-     * @param prType 项目类型
+     * @param prId 项目身份证
      */
-    public void setPrType(String prType) {
-        this.prType = prType == null ? null : prType.trim();
+    public void setPrId(String prId) {
+        this.prId = prId == null ? null : prId.trim();
     }
 
     /**
-     * 获取项目公司
-     *
-     * @return pr_compan - 项目公司
+     * @return his_pr_id
      */
-    public String getPrCompan() {
-        return prCompan;
+    public String getHisPrId() {
+        return hisPrId;
     }
 
     /**
-     * 设置项目公司
-     *
-     * @param prCompan 项目公司
+     * @param hisPrId
      */
-    public void setPrCompan(String prCompan) {
-        this.prCompan = prCompan == null ? null : prCompan.trim();
+    public void setHisPrId(String hisPrId) {
+        this.hisPrId = hisPrId == null ? null : hisPrId.trim();
     }
 
     /**
@@ -602,93 +615,183 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取项目身份证
+     * 获取酒店名称
      *
-     * @return pr_id - 项目身份证
+     * @return hotel_name - 酒店名称
      */
-    public String getPrId() {
-        return prId;
+    public String getHotelName() {
+        return hotelName;
     }
 
     /**
-     * 设置项目身份证
+     * 设置酒店名称
      *
-     * @param prId 项目身份证
+     * @param hotelName 酒店名称
      */
-    public void setPrId(String prId) {
-        this.prId = prId == null ? null : prId.trim();
+    public void setHotelName(String hotelName) {
+        this.hotelName = hotelName == null ? null : hotelName.trim();
     }
 
     /**
-     * 获取操盘类型
+     * 获取资产类型
      *
-     * @return ph_optyp - 操盘类型
+     * @return ph_asstyp - 资产类型
      */
-    public String getPhOptyp() {
-        return phOptyp;
+    public String getPhAsstyp() {
+        return phAsstyp;
     }
 
     /**
-     * 设置操盘类型
+     * 设置资产类型
      *
-     * @param phOptyp 操盘类型
+     * @param phAsstyp 资产类型
      */
-    public void setPhOptyp(String phOptyp) {
-        this.phOptyp = phOptyp == null ? null : phOptyp.trim();
+    public void setPhAsstyp(String phAsstyp) {
+        this.phAsstyp = phAsstyp == null ? null : phAsstyp.trim();
     }
 
     /**
-     * 获取当前并表类型
+     * 获取酒店地址
      *
-     * @return ca_typ - 当前并表类型
+     * @return hotel_address - 酒店地址
      */
-    public String getCaTyp() {
-        return caTyp;
+    public String getHotelAddress() {
+        return hotelAddress;
     }
 
     /**
-     * 设置当前并表类型
+     * 设置酒店地址
      *
-     * @param caTyp 当前并表类型
+     * @param hotelAddress 酒店地址
      */
-    public void setCaTyp(String caTyp) {
-        this.caTyp = caTyp == null ? null : caTyp.trim();
+    public void setHotelAddress(String hotelAddress) {
+        this.hotelAddress = hotelAddress == null ? null : hotelAddress.trim();
     }
 
     /**
-     * 获取预估并表类型
+     * 获取开业日期
      *
-     * @return ca_typ_x - 预估并表类型
+     * @return ph_open_d - 开业日期
      */
-    public String getCaTypX() {
-        return caTypX;
+    public Date getPhOpenD() {
+        return phOpenD;
     }
 
     /**
-     * 设置预估并表类型
+     * 设置开业日期
      *
-     * @param caTypX 预估并表类型
+     * @param phOpenD 开业日期
      */
-    public void setCaTypX(String caTypX) {
-        this.caTypX = caTypX == null ? null : caTypX.trim();
+    public void setPhOpenD(Date phOpenD) {
+        this.phOpenD = phOpenD;
     }
 
     /**
-     * 获取预估状态达成时间（并表类型）
+     * 获取酒店管理方
      *
-     * @return ca_typ_t - 预估状态达成时间（并表类型）
+     * @return hotel_res - 酒店管理方
      */
-    public String getCaTypT() {
-        return caTypT;
+    public String getHotelRes() {
+        return hotelRes;
     }
 
     /**
-     * 设置预估状态达成时间（并表类型）
+     * 设置酒店管理方
      *
-     * @param caTypT 预估状态达成时间（并表类型）
+     * @param hotelRes 酒店管理方
      */
-    public void setCaTypT(String caTypT) {
-        this.caTypT = caTypT == null ? null : caTypT.trim();
+    public void setHotelRes(String hotelRes) {
+        this.hotelRes = hotelRes == null ? null : hotelRes.trim();
+    }
+
+    /**
+     * 获取项目获取时的状态
+     *
+     * @return ph_prgets - 项目获取时的状态
+     */
+    public String getPhPrgets() {
+        return phPrgets;
+    }
+
+    /**
+     * 设置项目获取时的状态
+     *
+     * @param phPrgets 项目获取时的状态
+     */
+    public void setPhPrgets(String phPrgets) {
+        this.phPrgets = phPrgets == null ? null : phPrgets.trim();
+    }
+
+    /**
+     * 获取项目获取方式
+     *
+     * @return pr_gettyp - 项目获取方式
+     */
+    public String getPrGettyp() {
+        return prGettyp;
+    }
+
+    /**
+     * 设置项目获取方式
+     *
+     * @param prGettyp 项目获取方式
+     */
+    public void setPrGettyp(String prGettyp) {
+        this.prGettyp = prGettyp == null ? null : prGettyp.trim();
+    }
+
+    /**
+     * 获取收并购类型
+     *
+     * @return ph_ma_typ - 收并购类型
+     */
+    public String getPhMaTyp() {
+        return phMaTyp;
+    }
+
+    /**
+     * 设置收并购类型
+     *
+     * @param phMaTyp 收并购类型
+     */
+    public void setPhMaTyp(String phMaTyp) {
+        this.phMaTyp = phMaTyp == null ? null : phMaTyp.trim();
+    }
+
+    /**
+     * 获取酒店品牌
+     *
+     * @return hotel_bran - 酒店品牌
+     */
+    public String getHotelBran() {
+        return hotelBran;
+    }
+
+    /**
+     * 设置酒店品牌
+     *
+     * @param hotelBran 酒店品牌
+     */
+    public void setHotelBran(String hotelBran) {
+        this.hotelBran = hotelBran == null ? null : hotelBran.trim();
+    }
+
+    /**
+     * 获取酒店档次
+     *
+     * @return hotel_star - 酒店档次
+     */
+    public String getHotelStar() {
+        return hotelStar;
+    }
+
+    /**
+     * 设置酒店档次
+     *
+     * @param hotelStar 酒店档次
+     */
+    public void setHotelStar(String hotelStar) {
+        this.hotelStar = hotelStar == null ? null : hotelStar.trim();
     }
 
     /**
@@ -836,39 +939,75 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取产品线
+     * 获取当前并表类型
      *
-     * @return ph_prdlin - 产品线
+     * @return ca_typ - 当前并表类型
      */
-    public String getPhPrdlin() {
-        return phPrdlin;
+    public String getCaTyp() {
+        return caTyp;
     }
 
     /**
-     * 设置产品线
+     * 设置当前并表类型
      *
-     * @param phPrdlin 产品线
+     * @param caTyp 当前并表类型
      */
-    public void setPhPrdlin(String phPrdlin) {
-        this.phPrdlin = phPrdlin == null ? null : phPrdlin.trim();
+    public void setCaTyp(String caTyp) {
+        this.caTyp = caTyp == null ? null : caTyp.trim();
     }
 
     /**
-     * 获取客研土地分类
+     * 获取预估并表类型
      *
-     * @return ph_landcl - 客研土地分类
+     * @return ca_typ_x - 预估并表类型
      */
-    public String getPhLandcl() {
-        return phLandcl;
+    public String getCaTypX() {
+        return caTypX;
     }
 
     /**
-     * 设置客研土地分类
+     * 设置预估并表类型
      *
-     * @param phLandcl 客研土地分类
+     * @param caTypX 预估并表类型
      */
-    public void setPhLandcl(String phLandcl) {
-        this.phLandcl = phLandcl == null ? null : phLandcl.trim();
+    public void setCaTypX(String caTypX) {
+        this.caTypX = caTypX == null ? null : caTypX.trim();
+    }
+
+    /**
+     * 获取预估状态达成时间（并表类型）
+     *
+     * @return ca_typ_t - 预估状态达成时间（并表类型）
+     */
+    public String getCaTypT() {
+        return caTypT;
+    }
+
+    /**
+     * 设置预估状态达成时间（并表类型）
+     *
+     * @param caTypT 预估状态达成时间（并表类型）
+     */
+    public void setCaTypT(String caTypT) {
+        this.caTypT = caTypT == null ? null : caTypT.trim();
+    }
+
+    /**
+     * 获取项目公司
+     *
+     * @return pr_compan - 项目公司
+     */
+    public String getPrCompan() {
+        return prCompan;
+    }
+
+    /**
+     * 设置项目公司
+     *
+     * @param prCompan 项目公司
+     */
+    public void setPrCompan(String prCompan) {
+        this.prCompan = prCompan == null ? null : prCompan.trim();
     }
 
     /**
@@ -908,96 +1047,6 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取资产类型
-     *
-     * @return ph_asstyp - 资产类型
-     */
-    public String getPhAsstyp() {
-        return phAsstyp;
-    }
-
-    /**
-     * 设置资产类型
-     *
-     * @param phAsstyp 资产类型
-     */
-    public void setPhAsstyp(String phAsstyp) {
-        this.phAsstyp = phAsstyp == null ? null : phAsstyp.trim();
-    }
-
-    /**
-     * 获取项目获取方式
-     *
-     * @return pr_gettyp - 项目获取方式
-     */
-    public String getPrGettyp() {
-        return prGettyp;
-    }
-
-    /**
-     * 设置项目获取方式
-     *
-     * @param prGettyp 项目获取方式
-     */
-    public void setPrGettyp(String prGettyp) {
-        this.prGettyp = prGettyp == null ? null : prGettyp.trim();
-    }
-
-    /**
-     * 获取收并购类型
-     *
-     * @return ph_ma_typ - 收并购类型
-     */
-    public String getPhMaTyp() {
-        return phMaTyp;
-    }
-
-    /**
-     * 设置收并购类型
-     *
-     * @param phMaTyp 收并购类型
-     */
-    public void setPhMaTyp(String phMaTyp) {
-        this.phMaTyp = phMaTyp == null ? null : phMaTyp.trim();
-    }
-
-    /**
-     * 获取项目获取时的状态
-     *
-     * @return ph_prgets - 项目获取时的状态
-     */
-    public String getPhPrgets() {
-        return phPrgets;
-    }
-
-    /**
-     * 设置项目获取时的状态
-     *
-     * @param phPrgets 项目获取时的状态
-     */
-    public void setPhPrgets(String phPrgets) {
-        this.phPrgets = phPrgets == null ? null : phPrgets.trim();
-    }
-
-    /**
-     * 获取开业日期
-     *
-     * @return ph_open_d - 开业日期
-     */
-    public Date getPhOpenD() {
-        return phOpenD;
-    }
-
-    /**
-     * 设置开业日期
-     *
-     * @param phOpenD 开业日期
-     */
-    public void setPhOpenD(Date phOpenD) {
-        this.phOpenD = phOpenD;
-    }
-
-    /**
      * 获取项目预算状态
      *
      * @return pr_bugets - 项目预算状态
@@ -1016,147 +1065,165 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取改造成本分级
+     * 获取是否售转持
      *
-     * @return ph_rnlev - 改造成本分级
+     * @return ph_sh_flg - 是否售转持
      */
-    public String getPhRnlev() {
-        return phRnlev;
+    public String getPhShFlg() {
+        return phShFlg;
     }
 
     /**
-     * 设置改造成本分级
+     * 设置是否售转持
      *
-     * @param phRnlev 改造成本分级
+     * @param phShFlg 是否售转持
      */
-    public void setPhRnlev(String phRnlev) {
-        this.phRnlev = phRnlev == null ? null : phRnlev.trim();
+    public void setPhShFlg(String phShFlg) {
+        this.phShFlg = phShFlg == null ? null : phShFlg.trim();
     }
 
     /**
-     * 获取房型
+     * 获取运营阶段管理类型
      *
-     * @return ph_flplan - 房型
+     * @return manage_typ - 运营阶段管理类型
      */
-    public String getPhFlplan() {
-        return phFlplan;
+    public String getManageTyp() {
+        return manageTyp;
     }
 
     /**
-     * 设置房型
+     * 设置运营阶段管理类型
      *
-     * @param phFlplan 房型
+     * @param manageTyp 运营阶段管理类型
      */
-    public void setPhFlplan(String phFlplan) {
-        this.phFlplan = phFlplan == null ? null : phFlplan.trim();
+    public void setManageTyp(String manageTyp) {
+        this.manageTyp = manageTyp == null ? null : manageTyp.trim();
     }
 
     /**
-     * 获取承租合同租赁年限（年）
+     * 获取合同阶段
      *
-     * @return ph_leaper - 承租合同租赁年限（年）
+     * @return cont_stage - 合同阶段
      */
-    public Integer getPhLeaper() {
-        return phLeaper;
+    public String getContStage() {
+        return contStage;
     }
 
     /**
-     * 设置承租合同租赁年限（年）
+     * 设置合同阶段
      *
-     * @param phLeaper 承租合同租赁年限（年）
+     * @param contStage 合同阶段
      */
-    public void setPhLeaper(Integer phLeaper) {
-        this.phLeaper = phLeaper;
+    public void setContStage(String contStage) {
+        this.contStage = contStage == null ? null : contStage.trim();
     }
 
     /**
-     * 获取承租合同租赁起始日期 （含免租期）
+     * 获取酒店区位
      *
-     * @return ph_ren_sd - 承租合同租赁起始日期 （含免租期）
+     * @return hotel_ocat - 酒店区位
      */
-    public Date getPhRenSd() {
-        return phRenSd;
+    public String getHotelOcat() {
+        return hotelOcat;
     }
 
     /**
-     * 设置承租合同租赁起始日期 （含免租期）
+     * 设置酒店区位
      *
-     * @param phRenSd 承租合同租赁起始日期 （含免租期）
+     * @param hotelOcat 酒店区位
      */
-    public void setPhRenSd(Date phRenSd) {
-        this.phRenSd = phRenSd;
+    public void setHotelOcat(String hotelOcat) {
+        this.hotelOcat = hotelOcat == null ? null : hotelOcat.trim();
     }
 
     /**
-     * 获取承租合同租赁截止日期
+     * 获取是否地铁上盖
      *
-     * @return ph_ren_ed - 承租合同租赁截止日期
+     * @return ph_mc_flg - 是否地铁上盖
      */
-    public Date getPhRenEd() {
-        return phRenEd;
+    public String getPhMcFlg() {
+        return phMcFlg;
     }
 
     /**
-     * 设置承租合同租赁截止日期
+     * 设置是否地铁上盖
      *
-     * @param phRenEd 承租合同租赁截止日期
+     * @param phMcFlg 是否地铁上盖
      */
-    public void setPhRenEd(Date phRenEd) {
-        this.phRenEd = phRenEd;
+    public void setPhMcFlg(String phMcFlg) {
+        this.phMcFlg = phMcFlg == null ? null : phMcFlg.trim();
     }
 
     /**
-     * 获取门店地址
+     * 获取是否设充电桩
      *
-     * @return ph_shpadr - 门店地址
+     * @return charg_flg - 是否设充电桩
      */
-    public String getPhShpadr() {
-        return phShpadr;
+    public String getChargFlg() {
+        return chargFlg;
     }
 
     /**
-     * 设置门店地址
+     * 设置是否设充电桩
      *
-     * @param phShpadr 门店地址
+     * @param chargFlg 是否设充电桩
      */
-    public void setPhShpadr(String phShpadr) {
-        this.phShpadr = phShpadr == null ? null : phShpadr.trim();
+    public void setChargFlg(String chargFlg) {
+        this.chargFlg = chargFlg == null ? null : chargFlg.trim();
     }
 
     /**
-     * 获取商机名称
+     * 获取是否设机械车位
      *
-     * @return ph_opname - 商机名称
+     * @return park_flg - 是否设机械车位
      */
-    public String getPhOpname() {
-        return phOpname;
+    public String getParkFlg() {
+        return parkFlg;
     }
 
     /**
-     * 设置商机名称
+     * 设置是否设机械车位
      *
-     * @param phOpname 商机名称
+     * @param parkFlg 是否设机械车位
      */
-    public void setPhOpname(String phOpname) {
-        this.phOpname = phOpname == null ? null : phOpname.trim();
+    public void setParkFlg(String parkFlg) {
+        this.parkFlg = parkFlg == null ? null : parkFlg.trim();
     }
 
     /**
-     * 获取商机编码
+     * 获取酒店规模
      *
-     * @return ph_opid - 商机编码
+     * @return hotel_scal - 酒店规模
      */
-    public String getPhOpid() {
-        return phOpid;
+    public String getHotelScal() {
+        return hotelScal;
     }
 
     /**
-     * 设置商机编码
+     * 设置酒店规模
      *
-     * @param phOpid 商机编码
+     * @param hotelScal 酒店规模
      */
-    public void setPhOpid(String phOpid) {
-        this.phOpid = phOpid == null ? null : phOpid.trim();
+    public void setHotelScal(String hotelScal) {
+        this.hotelScal = hotelScal == null ? null : hotelScal.trim();
+    }
+
+    /**
+     * 获取总图布局
+     *
+     * @return hotel_ayou - 总图布局
+     */
+    public String getHotelAyou() {
+        return hotelAyou;
+    }
+
+    /**
+     * 设置总图布局
+     *
+     * @param hotelAyou 总图布局
+     */
+    public void setHotelAyou(String hotelAyou) {
+        this.hotelAyou = hotelAyou == null ? null : hotelAyou.trim();
     }
 
     /**
@@ -1178,52 +1245,20 @@ public class MirrorPhaseCThree implements PhaseService {
     }
 
     /**
-     * 获取是否售转持
+     * 获取客研土地分类
      *
-     * @return ph_sh_flg - 是否售转持
+     * @return ph_landcl - 客研土地分类
      */
-    public String getPhShFlg() {
-        return phShFlg;
+    public String getPhLandcl() {
+        return phLandcl;
     }
 
     /**
-     * 设置是否售转持
+     * 设置客研土地分类
      *
-     * @param phShFlg 是否售转持
+     * @param phLandcl 客研土地分类
      */
-    public void setPhShFlg(String phShFlg) {
-        this.phShFlg = phShFlg == null ? null : phShFlg.trim();
-    }
-
-    public String getTreePhm() {
-        return treePhm;
-    }
-
-    public void setTreePhm(String treePhm) {
-        this.treePhm = treePhm;
-    }
-
-    public String getHisPrId() {
-        return hisPrId;
-    }
-
-    public void setHisPrId(String hisPrId) {
-        this.hisPrId = hisPrId;
-    }
-
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
+    public void setPhLandcl(String phLandcl) {
+        this.phLandcl = phLandcl == null ? null : phLandcl.trim();
     }
 }

@@ -113,21 +113,18 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>com.longfor.longjian.datathrough.Application</mainClass>
-                    <layout>ZIP</layout>
+                    <classifier>exec</classifier>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
+
+
         </plugins>
     </build>
 </project>

@@ -24,7 +24,7 @@ public class MasterController {
      * @param jsonObject
      * @return
      */
-    @RequestMapping(value = "excuteProject",method = RequestMethod.POST)
+        @RequestMapping(value = "excuteProject",method = RequestMethod.POST)
     public LjBaseResponse excuteProject(@RequestBody JSONObject jsonObject){
         masterService.excuteProject(jsonObject);
         return new LjBaseResponse();

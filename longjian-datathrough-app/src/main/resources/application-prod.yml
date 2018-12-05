@@ -1,4 +1,4 @@
-server.port: 8080
+server.port: 8081
 management.port: 9981
 
 spring:
@@ -7,7 +7,7 @@ spring:
   cloud:
     consul:
       enabled: true
-      host: localhost
+      host: 192.168.37.218
       port: 8500
       discovery:
         register: true
@@ -34,11 +34,11 @@ longfor:
           login-murphy-one:
             connectTimeout: 5000 # default 10 * 1000
             readTimeout: 5000 # default 60 * 1000
+
     logging:
       kafka:
         enabled: true
-        broker: kafka01.paas.longhu.net:9092,kafka02.paas.longhu.net:9092,kafka03.paas.longhu.net:9092
-        env: test
+        broker:  http://kibana.longfor.sit
 
   data:
     pagehelper:
@@ -122,3 +122,4 @@ master:
   whitelist:
     enabled: false
     list: 192.168.32.23
+

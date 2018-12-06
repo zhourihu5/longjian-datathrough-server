@@ -254,25 +254,20 @@ public class MasterServiceImpl implements MasterService{
         int num=-1;
         if("C".equals(operCode)) { // 新增
             if (adptProj != null ) { // 项目已经存在
-                num=updateAptProject(adptProj,projName,gsCode);
+                num=saveOrupdateAptProject(adptProj,projCode,projName,gsCode,OperationEnum.UPDATE.getValue(),map);
                 result=updateResultStatus(num,projName,result);
             }else {
-                AdptProj newAdptProj=new AdptProj();
-                newAdptProj.setLhXmcode(projCode);
-                newAdptProj.setLhXmname(projName);
-                newAdptProj.setLhGscode(gsCode);
-                newAdptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
-                newAdptProj.setGroupId(4);
-                newAdptProj.setMenuType("1");
-                newAdptProj.setCreateAt(new Date());
-                newAdptProj.setUpdateAt(new Date());
-                num= adptProjService.createAdptProj(newAdptProj);
+                num=saveOrupdateAptProject(adptProj,projCode,projName,gsCode,OperationEnum.ADD.getValue(),map);
                 result=insertResultStatus(num,projName,result);
             }
         } else if("U".equals(operCode)) { // 更新
-            num=updateAptProject(adptProj,projName,gsCode);
-            result=updateResultStatus(num,projName,result);
-
+            if(adptProj==null){
+                num=saveOrupdateAptProject(adptProj,projCode,projName,gsCode,OperationEnum.ADD.getValue(),map);
+                result=insertResultStatus(num,projName,result);
+            }else{
+                num=saveOrupdateAptProject(adptProj,projCode,projName,gsCode,OperationEnum.UPDATE.getValue(),map);
+                result=updateResultStatus(num,projName,result);
+            }
         } else if("D".equals(operCode)) { // 删除
             if (adptProj != null ) {
                 adptProj.setDeleteAt(new Date());
@@ -284,18 +279,31 @@ public class MasterServiceImpl implements MasterService{
     }
 
     /**
-     * 更新项目数据
+     * 保存或者更新项目数据
      * @param adptProj
      * @param projName
      * @param gsCode
      */
-    private int  updateAptProject(AdptProj adptProj,String projName,String gsCode){
+    private int  saveOrupdateAptProject(AdptProj adptProj,String projCode,String projName,String gsCode,String type,Map<String,Object>map){
+        int num=0;
+        if(OperationEnum.ADD.getValue().equals(type)){
+            adptProj=new AdptProj();
+            adptProj.setLhXmcode(projCode);
+            adptProj.setLhXmname(projName);
+            adptProj.setLhGscode(gsCode);
+            adptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
+            adptProj.setGroupId(4);
+            adptProj.setMenuType("1");
+            adptProj.setCreateAt(new Date());
+            adptProj.setUpdateAt(new Date());
+            num= adptProjService.createAdptProj(adptProj);
+
+        }else {
             adptProj.setLhXmname(projName);
             adptProj.setLhGscode(gsCode);
             adptProj.setUpdateAt(new Date());
-
-           int num= adptProjService.updateAdptProj(adptProj);
-
+            num = adptProjService.updateAdptProj(adptProj);
+        }
            return num;
     }
 

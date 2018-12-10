@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.longfor.longjian.datathrough.dao.ZrreTFmtAllMapper">
-
   <resultMap id="BaseResultMap" type="com.longfor.longjian.datathrough.po.ZrreTFmtAll">
     <!--
       WARNING - @mbg.generated
@@ -41,4 +40,5 @@
     fmt_comb_desc, fmt_attr_1, attr_value_1, attr_value_desc_1, fmt_attr_2, attr_value_2, 
     attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
   </sql>
+
 </mapper>

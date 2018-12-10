@@ -88,6 +88,7 @@ public class MasterServiceImpl implements MasterService{
         JSONObject result = new JSONObject();
         JSONArray itemarry = jsonObject.getJSONArray("ItemArray"); //操作的数据集合
         JSONArray errorArray = new JSONArray();
+        result.put("SystemID","LAS");
         Map<String,Object> map=relLhCompanyToCompanyService.getRelLhCompanyToCompanyMap();
         boolean hasError = false;
         for (int i = 0; i<itemarry.size(); i++) {
@@ -132,7 +133,7 @@ public class MasterServiceImpl implements MasterService{
 
         JSONArray itemarry = jsonObject.getJSONArray("ItemArray");
         JSONObject result = new JSONObject();
-        result.put("SystemID", jsonObject.getString("SystemID"));
+        result.put("SystemID", "LAS");
         JSONArray errorArray = new JSONArray();
         boolean hasError = false;
         for (int i = 0; i<itemarry.size(); i++) {

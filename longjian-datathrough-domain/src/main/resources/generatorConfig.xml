@@ -77,12 +77,12 @@
         <table schema="MirrorPhaseCThree" tableName="mirror_phase_c_three" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>-->
-        <table schema="ZrreBst" tableName="zrre_bst" enableCountByExample="false" enableUpdateByExample="false"
+        <table schema="aaaa" tableName="aaa" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
                selectByExampleQueryId="false"></table>
-        <table schema="ZrretFmtAll" tableName="zrre_t_fmt_all" enableCountByExample="false" enableUpdateByExample="false"
+       <!-- <table schema="ZrretFmtAll" tableName="zrre_t_fmt_all" enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false"
-               selectByExampleQueryId="false"></table>
+               selectByExampleQueryId="false"></table>-->
 
 
     </context>

@@ -5,12 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.longfor.longjian.datathrough.app.appService.master.MasterService;
 import com.longfor.longjian.datathrough.app.util.DateUtil;
+import com.longfor.longjian.datathrough.app.util.RedisUtil;
 import com.longfor.longjian.datathrough.consts.OperationEnum;
 import com.longfor.longjian.datathrough.domain.innerService.*;
 import com.longfor.longjian.datathrough.po.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.common.util.Base64Utility;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -37,6 +40,9 @@ public class MasterServiceImpl implements MasterService{
 
     @Value("${master.msg.mdmError}")
     private String mdmError;
+
+    @Value("${master.msg.loginNamePass}")
+    private String loginNamePass;
 
     @Resource
     private RelLhCompanyToCompanyService relLhCompanyToCompanyService;
@@ -77,6 +83,9 @@ public class MasterServiceImpl implements MasterService{
     @Resource
     private ZrreTFmtAllService zrreTFmtAllService;
 
+    @Resource
+    private RedisTemplate dataThroughRedis;
+
 
     /**
      * 同步项目
@@ -89,7 +98,7 @@ public class MasterServiceImpl implements MasterService{
         JSONArray itemarry = jsonObject.getJSONArray("ItemArray"); //操作的数据集合
         JSONArray errorArray = new JSONArray();
         result.put("SystemID","LAS");
-        Map<String,Object> map=relLhCompanyToCompanyService.getRelLhCompanyToCompanyMap();
+        Map<String,Object> map= RedisUtil.getRelLhCompanyToCompanyMap(relLhCompanyToCompanyService,dataThroughRedis);
         boolean hasError = false;
         for (int i = 0; i<itemarry.size(); i++) {
             JSONObject resultJson = new JSONObject();
@@ -172,8 +181,9 @@ public class MasterServiceImpl implements MasterService{
      * @param jsonObject
      */
     @Override
+    @Transactional
     public void excuteDic(JSONObject jsonObject) {
-        log.debug(JSON.toJSONString(jsonObject));
+        log.debug("dic data===={}"+JSON.toJSONString(jsonObject));
         JSONArray jsonArray=jsonObject.getJSONArray("ConfigArray");
         List<ZrreTFmtAll>zrreTFmtAllList=new ArrayList<>();
         List<ZrreBst>zrreBstList=new ArrayList<>();
@@ -230,9 +240,11 @@ public class MasterServiceImpl implements MasterService{
                     }
                 }
                 if (zrreTFmtAllList.size() > 0) {
+                    zrreTFmtAllService.deleteAll();
                     zrreTFmtAllService.insertList(zrreTFmtAllList);
                 }
                 if (zrreBstList.size() > 0) {
+                    zrreBstService.deleteAll();
                     zrreBstService.insertList(zrreBstList);
                 }
             }
@@ -246,6 +258,7 @@ public class MasterServiceImpl implements MasterService{
      * */
     @Transactional
     private JSONObject operProject(JSONObject project,Map<String,Object>map) {
+        log.debug("project data====={}"+JSON.toJSONString(project));
         JSONObject result = new JSONObject();
         String operCode = project.getString("OP_CODE").trim();//操作码
         String projName = project.getString("PR_NAME").trim();//项目名称
@@ -292,13 +305,16 @@ public class MasterServiceImpl implements MasterService{
             adptProj.setLhXmcode(projCode);
             adptProj.setLhXmname(projName);
             adptProj.setLhGscode(gsCode);
-            adptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
+            if(map.get(gsCode)!=null){
+                adptProj.setCompanyId(Integer.parseInt(String.valueOf(map.get(gsCode))));
+            }else{//如果没有找到映射的公司id  则存0
+                adptProj.setCompanyId(0);
+            }
             adptProj.setGroupId(4);
             adptProj.setMenuType("1");
             adptProj.setCreateAt(new Date());
             adptProj.setUpdateAt(new Date());
             num= adptProjService.createAdptProj(adptProj);
-
         }else {
             adptProj.setLhXmname(projName);
             adptProj.setLhGscode(gsCode);
@@ -314,7 +330,7 @@ public class MasterServiceImpl implements MasterService{
     @Transactional
     private JSONObject operStage(JSONObject dujson) throws ParseException {
 
-        log.debug("data====="+JSON.toJSONString(dujson));
+        log.debug("data====={}"+JSON.toJSONString(dujson));
 
         String operCode = dujson.getString("OP_CODE").trim(); //C是新增  U是修改 D是删除
         String buId = dujson.getString("BU_ID").trim();//航道
@@ -324,7 +340,7 @@ public class MasterServiceImpl implements MasterService{
         String prId = dujson.getString("PR_ID").trim();//C4 项目身份证
         JSONObject result = new JSONObject();
 
-        Map<String,Object> map=relLhCompanyToCompanyService.getRelLhCompanyToCompanyMap();
+        Map<String,Object> map=RedisUtil.getRelLhCompanyToCompanyMap(relLhCompanyToCompanyService,dataThroughRedis);
         int num = -1;
         if ("C1".equals(buId)) {//如果航道是C1
             MirrorPhaseCOne oldMirrorPhaseCOne = mirrorPhaseCOneService.findByPhIdSapVer(phId, sapVer);//判断 同一个分期 同一个版本是否推送过
@@ -484,7 +500,6 @@ public class MasterServiceImpl implements MasterService{
         mirrorPhaseCOne.setBugetFlg(dujson.getString("BUGET_FLG"));
         mirrorPhaseCOne.setPhDelive(DateUtil.stampToDate(dujson.getString("PH_DELIVE")));
         mirrorPhaseCOne.setPhLandcl(dujson.getString("PH_LANDCL"));
-
         mirrorPhaseCOne.setArchSet(dujson.getString("ARCH_SET"));
         mirrorPhaseCOne.setHardcSet(dujson.getString("HARDC_SET"));
         mirrorPhaseCOne.setLandsSet(dujson.getString("LANDS_SET"));
@@ -895,8 +910,13 @@ public class MasterServiceImpl implements MasterService{
             }else{
                 type=OperationEnum.UPDATE.getType();
             }
-            adptPhase.setLhFqname(mirrorPhaseCOne.getTreePhm());
+            if(adptProj!=null){
+                adptPhase.setLhFqname(adptProj.getLhXmname()+"-"+mirrorPhaseCOne.getTreePhm());
+            }else{
+                adptPhase.setLhFqname(mirrorPhaseCOne.getTreePhm());
+            }
             adptPhase.setLhFqcode(mirrorPhaseCOne.getHisCode());
+            adptPhase.setMenuType("1");
         }
         if(object instanceof MirrorPhaseCTwo){
             MirrorPhaseCTwo mirrorPhaseCTwo=(MirrorPhaseCTwo) object;
@@ -907,28 +927,41 @@ public class MasterServiceImpl implements MasterService{
             }else{
                 type=OperationEnum.UPDATE.getType();
             }
-            adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
+            if(adptProj!=null){
+                adptPhase.setLhFqname(adptProj.getLhXmname()+"-"+mirrorPhaseCTwo.getTreePhm());
+            }else{
+                adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
+            }
             adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
+            adptPhase.setMenuType("2");
         }
 
         if(object instanceof MirrorPhaseCThree){
-            MirrorPhaseCThree mirrorPhaseCTwo=(MirrorPhaseCThree) object;
-            adptProj= adptProjService.getByPrCode(mirrorPhaseCTwo.getHisPrId());//根据项目code获取项目信息
-            adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCTwo.getHisCode(),adptProj.getLhXmcode());
+            MirrorPhaseCThree mirrorPhaseCThree=(MirrorPhaseCThree) object;
+            adptProj= adptProjService.getByPrCode(mirrorPhaseCThree.getHisPrId());//根据项目code获取项目信息
+            adptPhase=adptPhaseService.selectByFqXmCode(mirrorPhaseCThree.getHisCode(),adptProj.getLhXmcode());
             if(adptPhase==null){
                 adptPhase=new AdptPhase();
             }else{
                 type=OperationEnum.UPDATE.getType();
             }
-            adptPhase.setLhFqname(mirrorPhaseCTwo.getTreePhm());
-            adptPhase.setLhFqcode(mirrorPhaseCTwo.getHisCode());
+            if(adptProj!=null){
+                adptPhase.setLhFqname(adptProj.getLhXmname()+"-"+mirrorPhaseCThree.getTreePhm());
+            }else{
+                adptPhase.setLhFqname(mirrorPhaseCThree.getTreePhm());
+            }
+            adptPhase.setLhFqcode(mirrorPhaseCThree.getHisCode());
+            adptPhase.setMenuType("3");
         }
 
         adptPhase.setGroupId(4);
         adptPhase.setLhXmcode(adptProj.getLhXmcode());
         adptPhase.setLhGscode(adptProj.getLhGscode());
-        adptPhase.setMenuType("1");
-        adptPhase.setCompanyId(Integer.parseInt(String.valueOf(map.get(adptProj.getLhGscode()))));
+        if(map.get(adptProj.getLhGscode())!=null) {
+            adptPhase.setCompanyId(Integer.parseInt(String.valueOf(map.get(adptProj.getLhGscode()))));
+        }else{//如果分期对应的项目 映射的公司code不存在  则赋值为0
+            adptPhase.setCompanyId(0);
+        }
 
         int num=-1;
         if(OperationEnum.ADD.getType().equals(type)){
@@ -1090,20 +1123,18 @@ public class MasterServiceImpl implements MasterService{
      */
     private void executorCallBack(String body, boolean error) {
         RestTemplate restTemplate=new RestTemplate();
-        String userAndPass = "LASUSER:LAS12345"; //测试环境(10.49)
-        //String userAndPass = "LASUSER:$jLVrn^8"; //生产环境(10.37)
         HttpHeaders headers = new HttpHeaders();
 
-        headers.add("Authorization", "Basic " +  Base64Utility.encode(userAndPass.getBytes()));
+        headers.add("Authorization", "Basic " +  Base64Utility.encode(loginNamePass.getBytes()));
         headers.add("Content-Type","text/plain;charset=UTF-8");
         HttpEntity<String> entity = new HttpEntity<String>(body, headers);
-        log.debug("body==" + body);
+        log.debug("body=={}" + body);
 		/* body是Http消息体例如json串 */
-        log.debug(mdmSuccess);
-        log.debug(mdmError);
         if(error) {
+            log.debug("mdmError===={}"+mdmError);
             restTemplate.exchange(mdmError, HttpMethod.POST, entity, String.class);
         } else {
+            log.debug("mdmSuccess===={}"+mdmSuccess);
             restTemplate.exchange(mdmSuccess, HttpMethod.POST, entity, String.class);
         }
 

@@ -1,5 +1,6 @@
 package com.longfor.longjian.datathrough.app.appService.galactic.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.longfor.longjian.datathrough.app.appService.galactic.PushDataService;
 import com.longfor.longjian.datathrough.app.appService.galactic.PushService;
 import com.longfor.longjian.datathrough.app.util.DateUtil;
@@ -38,7 +39,7 @@ public class PushDataServiceImpl implements PushDataService {
     @Override
     public LFResultBean pushData(String updateAt) {
 
-        if(!StringUtils.isNotBlank(updateAt)){//如果为空 则默认推送昨天以后的数据
+        if(StringUtils.isBlank(updateAt)){//如果为空 则默认推送昨天以后的数据
             updateAt= DateUtil.getShortDate(-1)+" 00:00:00";
         }
 
@@ -53,6 +54,8 @@ public class PushDataServiceImpl implements PushDataService {
         allList.addAll(stageConResultList1);
         allList.addAll(stageConResultList2);
         allList.addAll(stageConResultList3);
+
+        log.debug("push data====={}"+ JSON.toJSONString(allList));
 
         LFResultBean lfResultBean=pushService.receiveFqMessage(allList);
 

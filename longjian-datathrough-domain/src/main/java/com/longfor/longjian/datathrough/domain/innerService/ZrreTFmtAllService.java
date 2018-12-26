@@ -11,4 +11,6 @@ public interface ZrreTFmtAllService {
 
    int insertList(List<ZrreTFmtAll> zrreTFmtAllList);
 
+   void deleteAll();
+
 }

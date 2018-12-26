@@ -10,4 +10,5 @@ import java.util.List;
 public interface ZrreBstService {
 
     int insertList(List<ZrreBst> zrreBstList);
+    void deleteAll();
 }

@@ -25,4 +25,10 @@ public class ZrreBstServiceImpl implements ZrreBstService {
     public int insertList(List<ZrreBst> zrreBstList) {
         return zrreBstMapper.insertList(zrreBstList);
     }
+
+    @Override
+    @LFAssignDataSource("custom01")
+    public void deleteAll() {
+        zrreBstMapper.deleteAll();
+    }
 }

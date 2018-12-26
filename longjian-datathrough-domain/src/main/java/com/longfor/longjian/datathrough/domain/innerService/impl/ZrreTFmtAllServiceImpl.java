@@ -25,4 +25,10 @@ public class ZrreTFmtAllServiceImpl implements ZrreTFmtAllService {
     public int insertList(List<ZrreTFmtAll> zrreTFmtAllList) {
         return zrreTFmtAllMapper.insertList(zrreTFmtAllList);
     }
+
+    @Override
+    @LFAssignDataSource("custom01")
+    public void deleteAll() {
+         zrreTFmtAllMapper.deleteAll();
+    }
 }

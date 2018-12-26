@@ -23,4 +23,9 @@
     id, mandt, ztree_ver, znode, nodeid, znode_name, namej, namee, zcity, zcity_name
   </sql>
 
+  <delete id="deleteAll">
+    delete from zrre_bst
+  </delete>
+
+
 </mapper>

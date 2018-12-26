@@ -41,4 +41,9 @@
     attr_value_desc_2, fmt_attr_3, attr_value_3, attr_value_desc_3
   </sql>
 
+  <delete id="deleteAll">
+    delete from zrre_t_fmt_all
+  </delete>
+
+
 </mapper>

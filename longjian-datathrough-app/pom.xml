@@ -56,6 +56,11 @@
             <artifactId>gaia-gfs-apollo-client</artifactId>
             <version>1.1.1</version>
         </dependency>
+        <dependency>
+            <groupId>com.longfor.longjian</groupId>
+            <artifactId>longjian-datathrough-domain</artifactId>
+            <version>1.0.1-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 
